@@ -1,43 +1,49 @@
 import os, a2s, mcstatus, time, asyncio
 from PIL import Image, ImageFont, ImageDraw
 
+ip = "73.207.108.187"
 servers = {
     "gmod": {
         "game": "gmod",
-        "port": 27015,
         "name": "eli gmod server",
+        "ip": (ip, 27015),
     },
     "sandbox": {
         "game": "gmod",
-        "port": 27017,
         "name": "eli sandbox server",
+        "ip": (ip, 27017),
     },
     "tf2": {
         "game": "tf2",
-        "port": 27016,
         "name": "eli tf2 server",
+        "ip": (ip, 27016),
     },
     "hldm": {
         "game": "hldm",
-        "port": 27013,
         "name": "eli hldm server",
+        "ip": (ip, 27013),
     },
     
     # extra
     "jazz": {
         "game": "gmod",
-        "port": 27041,
         "name": "eli jazztronauts",
+        "ip": (ip, 27041),
     },
     "sven": {
         "game": "sven",
-        "port": 27040,
         "name": "eli sven server",
+        "ip": (ip, 27040),
     },
     "mc": {
         "game": "minecraft",
         "name": "eli smp server",
-        "port": 25565
+        "ip": "mc.elisttm.space",
+    },
+    "creative": {
+        "game": "minecraft",
+        "name": "creative server",
+        "ip": "creative.elisttm.space",
     }
 }
 
@@ -70,15 +76,15 @@ class server_info(object):
         self.map_name = map_name
 
 def query_server(server):
-    port = servers[server]["port"]
     game = servers[server]["game"]
+    ip = servers[server]["ip"]
     playerlist = []
     try:
 
         if game in source_games:
-            q = a2s.info(("e.elisttm.space", port), 0.5)
+            q = a2s.info(ip, 0.2)
             if q.player_count > 0:
-                for player in a2s.players(("e.elisttm.space", port)):
+                for player in a2s.players(ip):
                     playerlist.append({
                         "name": "unconnected" if not player.name else player.name,
                         "score": player.score,
@@ -89,11 +95,11 @@ def query_server(server):
             return server_info(q.player_count, q.max_players, playerlist, subtitle, map_name)
         
         elif game == "minecraft":
-            q = mcstatus.JavaServer.lookup(f"e.elisttm.space:{port}", 0.5).status()
+            q = mcstatus.JavaServer.lookup(ip, 0.2).status()
             if q.players.sample:
                 for player in q.players.sample:
                     playerlist.append({"name": player.name,})
-            return server_info(q.players.online, q.players.max, playerlist, q.version.name, "")
+            return server_info(q.players.online, q.players.max, playerlist, ip, q.version.name)
     except (TimeoutError, ConnectionRefusedError):
         raise TimeoutError("server offline...")
     except Exception as e:

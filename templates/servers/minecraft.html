@@ -1,18 +1,21 @@
 {% extends "base.html" %}
 
-{% block title %}my gmod servers{% endblock %}
-{% block desc %}info related to my gmod servers{% endblock %}
+{% block title %}my minecraft servers{% endblock %}
+{% block desc %}info related to my minecraft servers{% endblock %}
 
 {% block background %}dirt2.png{% endblock %}
 
 {% block content %}
 
-	<h1>eli smp</h1>
+	<h1>minecraft servers</h1>
 	
 	<div class="servers">
 		<a><img src="/static/img/servers/banner-mc.gif?{{time}}" width="330" height="31"/></a>
+		<a><img src="/static/img/servers/banner-creative.gif?{{time}}" width="330" height="31"/></a>
 	</div>
 
-	<p>this page is currently unused but is parked in the event that i end up using it soon :3</p>
+	<p>while these arent intended for public eyes yet, this page is just for ease of access to resources</p>
+
+	<a class="btn" href="https://creative.elisttm.space">creative map</a>
 
 {% endblock %}

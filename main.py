@@ -75,11 +75,11 @@ async def _pages():
 async def _motd():
     return await render_template('etc/motd.html')
 
-@app.route('/connect/<game>')
-async def _connect(game):
-    if game not in srv.servers:
+@app.route('/connect/<server>')
+async def _connect(server):
+    if server not in srv.servers or srv.servers[server]["game"] not in srv.source_games:
         return quart.abort(404)
-    return redirect(f"steam://connect/73.207.108.187:{srv.servers[game]['port']}/chungus", code=302)
+    return redirect(f"steam://connect/{srv.ip}:{srv.servers[server]['ip'][1]}/chungus", code=302)
 
 
 @app.route('/index.html')
