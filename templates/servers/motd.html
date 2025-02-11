@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+	<meta charset="utf-8">
+	<meta name="robots" content="noindex">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		html, body {height: 100vh;}
+		body, h1, h2 {margin: 0; padding: 0; text-align: center; font-family: monospace;}
+		main {position: relative; top: 50%; transform: translateY(-50%);}
+		* {color: #fff}
+	</style>
+</head>
+<body style="background: #000 url('/static/img/bg/stars3.gif')"><main>
+	<h1>welcome to my {% if game %}{{game}} {% endif %}server :3</h1>
+	<br><h2>visit
+		{%- if game in have_pages %} <a href="/{{game}}">elisttm.space/{{game}}</a>
+		{%- else %} <a href="/servers">elisttm.space/servers</a>
+		{%- endif %} for more info!</h2><br>
+	<br><img src="/static/img/silly/hamster.gif" style="width:auto; height:60vh; margin:0 auto;">
+</main></body></html>

@@ -3,25 +3,29 @@
 {% block title %}my gmod servers{% endblock %}
 {% block desc %}info related to my gmod servers{% endblock %}
 
-{% block background %}gmod.png{% endblock %}
+{% block background %}gmod.gif{% endblock %}
 
 {% block content %}
 
 	<h1>my gmod servers</h1>
 	
 	<div class="servers">
-		<a href="/connect/gmod"><img src="/static/img/servers/banner-gmod.gif?{{time}}" width="330" height="31"/></a>
-		<a href="/connect/sandbox"><img src="/static/img/servers/banner-sandbox.gif?{{time}}" width="330" height="31"/></a>
+	{%- for server in ("gmod", "sandbox") %}
+        <span><a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
+        {% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
+        {% else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}</span>
+	{%- endfor %}
 	</div>
+	<p><a href="/servers">other servers</a></p>
 
-	<p>these servers run 24/7, one on sandbox 24/7 and the other on a collection of other gamemodes (ttt2, prophunt, hl2dm, deathrun, cinema, etc)
-	<br>you can switch the map and/or gamemode with !rtv</p>
+	<p>these run 24/7, one hosts a collection of gamemodes (ttt2, prophunt, hl2dm, etc) and the other only plays sandbox
+	<br>the gamemode + map can be switched with !rtv</p>
 	
 	<p><b>these addons are required to play!</b></p>
 
 		<a class="btn" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2085165984">gamemode addons</a>
 		<a class="btn" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2084328429">sandbox addons</a>
 
-	<p>(optional) <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3363234147">cs:s/hls/hl2dm/etc asset pack</a></p>
+	<p>(optional) <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3363234147">missing texture fix</a></p>
 
 {% endblock %}

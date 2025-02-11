@@ -10,11 +10,14 @@
 	<h1>minecraft servers</h1>
 	
 	<div class="servers">
-		<a><img src="/static/img/servers/banner-mc.gif?{{time}}" width="330" height="31"/></a>
-		<a><img src="/static/img/servers/banner-creative.gif?{{time}}" width="330" height="31"/></a>
+	{%- for server in ("smp", "creative") %}
+        <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
+	{%- endfor %}
 	</div>
 
-	<p>while these arent intended for public eyes yet, this page is just for ease of access to resources</p>
+	<p><a href="/servers">other servers</a></p>
+
+	<p>these arent public yet, this page is just for my own convenience</p>
 
 	<a class="btn" href="https://creative.elisttm.space">creative map</a>
 

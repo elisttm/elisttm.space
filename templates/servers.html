@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}my game servers{% endblock %}
-{% block desc %}info and links regarding my game servers{% endblock %}
+{% block desc %}a list of servers i host{% endblock %}
 
 {% block background %}code.gif{% endblock %}
 
@@ -9,18 +9,21 @@
 
 	<h1>my game servers</h1>
 
-    <p>these are all my public 24/7 game servers i host at home. clicking any of the images below will connect you to the respective server if possible!</p>
-    
+    <p>these are my public 24/7 game servers i host at home<br>banners update every minute!</p>
+
     <div class="servers">
-        <a href="/connect/gmod"><img src="/static/img/servers/banner-gmod.gif?{{time}}" width="330" height="31" alt=""/></a>
-        <a href="/connect/sandbox"><img src="/static/img/servers/banner-sandbox.gif?{{time}}" width="330" height="31" alt=""/></a>
-        <a href="/connect/tf2"><img src="/static/img/servers/banner-tf2.gif?{{time}}" width="330" height="31" alt=""/></a>
-        <a href="/connect/hldm"><img src="/static/img/servers/banner-hldm.gif?{{time}}" width="330" height="31" alt=""/></a>
+        {%- for server in ("gmod", "sandbox", "tf2", "hldm") %}
         
-        <p style="font-size:0.8em">last updated {{ curtime-time }} second(s) ago...</p>
-    </div>
-    
-    <a class="btn" href="/gmod">gmod server info &amp; addons</a><br>
-    
+        <span><a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
+            {% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
+            {% else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}</span>
+            
+            {%- endfor %}
+        </div>
+        
+        <p><a href="/servers/extra">more servers</a></p>
+
+    <a class="btn" href="/gmod">gmod info &amp; addons</a>
+    <a class="btn" href="/tf2">tf2 server info</a>
 
 {% endblock %}

@@ -3,16 +3,17 @@
 
 body {font-family: sans-serif; text-align: center; color: #fff; padding: 0; margin: 0 auto; width: 600px;}
 
-.header, nav, .main {margin: 4px 0; overflow: hidden;}
+.header, nav, .main {margin: 4px 0; overflow: hidden; box-sizing: border-box;}
 nav {display: flex; gap: 4px;}
 nav > a {font-family: "Trebuchet MS"; padding: 8px; flex-basis: 20%; text-decoration: none; font-weight: bold; overflow: hidden;}
 nav > a:hover, nav > a:active {background-color: #000;}
 .main, nav > a {background-color: rgba(0,0,0,0.8); border: 4px outset #fff;}
 .main {padding: 16px 0 24px;}
+.header {margin: 16px 0}
 
 h1, h2, h3 {font-family: monospace}
 h1, h2, h3, p {margin: 16px 64px 16px;}
-p {text-align: justify; text-align-last: center; word-spacing: 1px;}
+p {text-align: justify; text-align-last: center; line-height: 1.25; word-spacing: 1px;}
 p br {display: block; margin-top: 8px; content: ""}
 a {color: inherit; text-decoration: underline; cursor: url('/static/img/cursor-pointer.gif'), pointer;}
 
@@ -27,15 +28,15 @@ img, span, .inline {display: inline-block; vertical-align: middle;}
 .btn > img {margin: 0}
 .btn:hover, nav > a:hover {border-style: inset}
 
+.buttons {margin: 8px 0;}
+.buttons span {width: 31px; height: 31px; margin: 16px 1px;}
+.buttons img {width: 88px; height: 31px; margin: 2px 1px;}
+.buttons > a > *:hover {margin: 0; border: 1px solid #fff;}
 
-.socials {margin: 8px 0;}
-.socials span {width: 31px; height: 31px; margin: 16px 1px;}
-.socials img {width: 88px; height: 31px; margin: 2px 1px;}
-
-.servers {margin: 24px 0;}
+.servers {margin: 24px 0 16px;}
+.servers img {margin: 1px -1px}
 .servers > * {display: block;}
-
-.socials > a > *:hover, .servers > a > *:hover {margin: 0px; border: 1px solid #fff;}
+.servers a > *:hover {margin: 0 -2px; border: 1px solid #fff;}
 
 @media screen and (max-width: 600px) {
 	body {width: 100vw;}

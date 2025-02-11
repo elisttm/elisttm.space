@@ -3,17 +3,24 @@
 {% block title %}my tf2 server{% endblock %}
 {% block desc %}info related to my tf2 server(s){% endblock %}
 
-{% block background %}tf2.png{% endblock %}
+{% block background %}tf2.gif{% endblock %}
 
 {% block content %}
 
 	<h1>my tf2 server</h1>
 	
     <div class="servers">
-        <a href=href="/connect/tf2"><img src="/static/img/servers/banner-tf2.gif?{{time}}" width="330" height="31"/></a>
+    {%- for server in ("tf2",) %}
+        <span><a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
+        {% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
+        {% else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}</span>
+	{%- endfor %}
     </div>
+    
+    <p><a href="/servers">other servers</a></p>
 	
     <p>this server runs 24/7, usually on hightower</p>
-    <p>!nominate and !rtv for map switches are supported</p>
+    <p>i plan to add more servers in the future for other gamemodes... check back later!</p>
+    <p>the commands !nominate and !rtv can be used for map switching, and !scramble can be used to scramble teams</p>
 
 {% endblock %}

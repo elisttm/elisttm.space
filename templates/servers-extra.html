@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}extra game servers{% endblock %}
-{% block desc %}extra links for extra servers i dont want on the main page{% endblock %}
+{% block desc %}a list of more servers i host{% endblock %}
 
 {% block background %}code.gif{% endblock %}
 
@@ -12,13 +12,14 @@
     <p>servers that arent kept online 24/7 or just arent as interesting</p>
     
     <div class="servers">
-        <a href="/connect/jazz"><img src="/static/img/servers/banner-jazz.gif?{{time}}" width="330" height="31" alt=""/></a>
-        <a href="/connect/sven"><img src="/static/img/servers/banner-sven.gif?{{time}}" width="330" height="31" alt=""/></a>
-        <br>
-        <a href="/mc"><img src="/static/img/servers/banner-mc.gif?{{time}}" width="330" height="31" alt=""/></a>
-        <a href="/mc"><img src="/static/img/servers/banner-creative.gif?{{time}}" width="330" height="31" alt=""/></a>
-
-        <p style="font-size:0.8em">last updated {{ curtime-time }} second(s) ago...</p>
+    {%- for server in ("jazz", "sven", "", "smp", "creative") %}
+        {% if not server %}<br>{% else %}
+        <span><a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
+        {% if servers[server]["game"] != "mc" %}{% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
+        {% else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}{% endif %}</span>{% endif %}
+	{%- endfor %}
     </div>
+
+    <p><a href="/servers">regular serverlist</a></p>
 
 {% endblock %}
