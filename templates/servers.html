@@ -9,19 +9,23 @@
 
 	<h1>my game servers</h1>
 
-    <p>these are my public 24/7 game servers i host at home<br>banners update every minute!</p>
+    <p>
+        these are most of my public game servers i host at home
+        <br>banners update every minute!
+    </p>
 
     <div class="servers">
-        {%- for server in ("gmod", "sandbox", "tf2", "hldm") %}
-        
-        <span><a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
+    {%- for server in ("gmodA", "gmodB", "sandbox", "tf2A", "tf2B", "hl2mp", "hldm") %}
+        <span>
+            <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
             {% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
-            {% else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}</span>
+            {%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}
+        </span>
             
-            {%- endfor %}
-        </div>
+    {%- endfor %}
+    </div>
         
-        <p><a href="/servers/extra">more servers</a></p>
+        <p><a href="/servers/extra">full serverlist</a></p>
 
     <a class="btn" href="/gmod">gmod info &amp; addons</a>
     <a class="btn" href="/tf2">tf2 server info</a>

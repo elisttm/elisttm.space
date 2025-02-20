@@ -5,7 +5,7 @@ body {font-family: sans-serif; text-align: center; color: #fff; padding: 0; marg
 
 .header, nav, .main {margin: 4px 0; overflow: hidden; box-sizing: border-box;}
 nav {display: flex; gap: 4px;}
-nav > a {font-family: "Trebuchet MS"; padding: 8px; flex-basis: 20%; text-decoration: none; font-weight: bold; overflow: hidden;}
+nav > a {font-family: "Trebuchet MS", sans-serif; padding: 8px; flex-basis: 20%; text-decoration: none; font-weight: bold; overflow: hidden;}
 nav > a:hover, nav > a:active {background-color: #000;}
 .main, nav > a {background-color: rgba(0,0,0,0.8); border: 4px outset #fff;}
 .main {padding: 16px 0 24px;}

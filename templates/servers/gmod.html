@@ -10,15 +10,17 @@
 	<h1>my gmod servers</h1>
 	
 	<div class="servers">
-	{%- for server in ("gmod", "sandbox") %}
-        <span><a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
-        {% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
-        {% else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}</span>
+	{%- for server in ("gmodA", "gmodB", "sandbox") %}
+		<span>
+			<a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
+			{% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
+			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}
+		</span>
 	{%- endfor %}
 	</div>
-	<p><a href="/servers">other servers</a></p>
+	<p><a href="/servers">more servers</a></p>
 
-	<p>these run 24/7, one hosts a collection of gamemodes (ttt2, prophunt, hl2dm, etc) and the other only plays sandbox
+	<p>these run 24/7. my sandbox server runs only sandbox and the others run other silly gamemodes
 	<br>the gamemode + map can be switched with !rtv</p>
 	
 	<p><b>these addons are required to play!</b></p>

@@ -10,17 +10,18 @@
 	<h1>my tf2 server</h1>
 	
     <div class="servers">
-    {%- for server in ("tf2",) %}
-        <span><a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
-        {% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
-        {% else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}</span>
+    {%- for server in ("tf2A", "tf2B") %}
+        <span>
+            <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
+            {% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
+            {%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}
+        </span>
 	{%- endfor %}
     </div>
     
-    <p><a href="/servers">other servers</a></p>
+    <p><a href="/servers">more servers</a></p>
 	
-    <p>this server runs 24/7, usually on hightower</p>
-    <p>i plan to add more servers in the future for other gamemodes... check back later!</p>
-    <p>the commands !nominate and !rtv can be used for map switching, and !scramble can be used to scramble teams</p>
+    <p>these run 24/7 on all maps. one mainly runs hightower and the other runs whatever else</p>
+    <p>the commands !nominate and !rtv can be used for map switching, and !scramble can be used to scramble the teams!</p>
 
 {% endblock %}

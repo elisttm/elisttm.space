@@ -3,10 +3,15 @@ from PIL import Image, ImageFont, ImageDraw
 
 ip = "73.207.108.187"
 servers = {
-    "gmod": {
+    "gmodA": {
         "game": "gmod",
-        "name": "eli gmod server",
+        "name": "eli gmod server A",
         "ip": (ip, 27015),
+    },
+    "gmodB": {
+        "game": "gmod",
+        "name": "eli gmod server B",
+        "ip": (ip, 27018),
     },
     "sandbox": {
         "game": "gmod",
@@ -18,10 +23,20 @@ servers = {
         "name": "eli jazztronauts",
         "ip": (ip, 27041),
     },
-    "tf2": {
+    "tf2A": {
         "game": "tf2",
-        "name": "eli tf2 server",
+        "name": "eli tf2 server A",
         "ip": (ip, 27016),
+    },
+    "tf2B": {
+        "game": "tf2",
+        "name": "eli tf2 server B",
+        "ip": (ip, 27019),
+    },
+    "hl2mp": {
+        "game": "hl2mp",
+        "name": "eli hl2mp server",
+        "ip": (ip, 27039),
     },
     "hldm": {
         "game": "hldm",
@@ -46,7 +61,7 @@ servers = {
 }
 
 class xtra:
-    source_games = ("gmod", "tf2", "hldm", "sven", "l4d2")
+    source_games = ("gmod", "tf2", "hl2mp", "hldm", "sven")
     have_pages = ("gmod", "tf2", "mc")
     
     full_names = {
@@ -113,6 +128,9 @@ def seconds(sec:int):
         x = f"{hr}h {min}m {sec}s"
     return x
 
+def truncate_str(string, length):
+    return (string[:length] + "...") if len(string) > length else string
+
 def query_server(server):
     game = servers[server]["game"]
     ip = servers[server]["ip"]
@@ -123,15 +141,12 @@ def query_server(server):
             if q.player_count > 0:
                 for player in a2s.players(ip):
                     playerlist.append({
-                        "name": "unconnected" if not player.name else player.name,
+                        "name": truncate_str(player.name, 16) if player.name else "unconnected",
                         "score": player.score,
                         "time": seconds(round(player.duration))
                     })
-            if game == "tf2":
-                subtitleA = xtra.tf2_gamemode(q.map_name)
-            else:
-                subtitleA = (q.game[:24] + "...") if len(q.game) > 24 else q.game
-            subtitleB = (q.map_name[:18] + "...") if len(q.map_name) > 18 else q.map_name
+            subtitleA = xtra.tf2_gamemode(q.map_name) if game == "tf2" else truncate_str(q.game, 24)
+            subtitleB = truncate_str(q.map_name, 18)
             return server_info(q.player_count, q.max_players, playerlist, q.map_name, q.game, subtitleA, subtitleB)
         
         elif game == "mc":

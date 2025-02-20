@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US"><head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<link rel="stylesheet" href="/static/style.css?v=30" type="text/css"/>
+	<link rel="stylesheet" href="/static/style.css?v=31" type="text/css"/>
 	<link rel="icon" href="/static/img/logo.png" type='image/png' sizes="128x128"/>
 	<link rel="icon" href="/static/img/logo64.png" type='image/png' sizes="64x64"/>
 	<link rel="icon" href="/static/img/logo32.png" type='image/png' sizes="32x32"/>
@@ -14,7 +14,7 @@
 	<meta property="og:title" content="{{ self.title() }}{% if not self.title() %}elisttm.space{% endif %}"/>
 	<meta property="og:description" content="{{ self.desc() }}"/>
 	<meta property="og:type" content="website"/>
-	{%- block extra %}{% endblock %}</head>
+{%- block extra %}{% endblock %}</head>
 <body style="background:#000{% if self.background() %} url('/static/img/bg/{% block background %}{% endblock %}');{% endif %}">
 
 <div class="header">
