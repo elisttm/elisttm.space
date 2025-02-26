@@ -3,35 +3,40 @@ from PIL import Image, ImageFont, ImageDraw
 
 ip = "73.207.108.187"
 servers = {
-    "gmodA": {
-        "game": "gmod",
-        "name": "eli gmod server A",
-        "ip": (ip, 27015),
-    },
-    "gmodB": {
-        "game": "gmod",
-        "name": "eli gmod server B",
-        "ip": (ip, 27018),
-    },
     "sandbox": {
         "game": "gmod",
         "name": "eli sandbox server",
         "ip": (ip, 27017),
+    },
+    "gmoda": {
+        "game": "gmod",
+        "name": "eli gmod server A",
+        "ip": (ip, 27015),
+    },
+    "gmodb": {
+        "game": "gmod",
+        "name": "eli gmod server B",
+        "ip": (ip, 27018),
     },
     "jazz": {
         "game": "gmod",
         "name": "eli jazztronauts",
         "ip": (ip, 27041),
     },
-    "tf2A": {
+    "tf2a": {
         "game": "tf2",
         "name": "eli tf2 server A",
         "ip": (ip, 27016),
     },
-    "tf2B": {
+    "tf2b": {
         "game": "tf2",
         "name": "eli tf2 server B",
         "ip": (ip, 27019),
+    },
+    "tf2z": {
+        "game": "tf2",
+        "name": "eli tf2 server Z",
+        "ip": (ip, 27043),
     },
     "hl2mp": {
         "game": "hl2mp",
@@ -63,12 +68,20 @@ servers = {
 class xtra:
     source_games = ("gmod", "tf2", "hl2mp", "hldm", "sven")
     have_pages = ("gmod", "tf2", "mc")
+
+    server_keys = {
+        "gmod": ("sandbox", "gmoda", "gmodb"),
+        "tf2": ("tf2a", "tf2b", "tf2z"),
+        "mc": ("creative", "smp"),
+        "hl2mp": ("hl2mp"),
+    }
     
     full_names = {
         "gmod":  "Garry's Mod",
         "tf2":   "Team Fortress 2",
-        "sven":  "Sven-Coop",
+        "hl2mp": "Half-Life 2: Deathmatch",
         "hldm":  "Half-Life: Deathmatch",
+        "sven":  "Sven-Coop",
         "mc":    "Minecraft",
     }
     
@@ -87,6 +100,8 @@ class xtra:
             "vsh_":   "Vs. Saxton Hale",
             "tow_":   "Tug of War",
             "zi_":    "Zombie Infection",
+
+            "tf2ware_ultimate": "TF2Ware Ultimate"
         }
         for prefix, mode in prefixes.items():
             if map_name.lower().startswith(prefix):
@@ -141,7 +156,7 @@ def query_server(server):
             if q.player_count > 0:
                 for player in a2s.players(ip):
                     playerlist.append({
-                        "name": truncate_str(player.name, 16) if player.name else "unconnected",
+                        "name": truncate_str(player.name, 24) if player.name else "unconnected",
                         "score": player.score,
                         "time": seconds(round(player.duration))
                     })

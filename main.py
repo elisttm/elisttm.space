@@ -12,11 +12,11 @@ app = quart.Quart(__name__)
 app.config["BACKGROUND_TASK_SHUTDOWN_TIMEOUT "] = 0
 
 @app.before_serving
-async def startup():
+async def _startup():
     app.add_background_task = asyncio.ensure_future(srv.draw_banners())
 
 @app.after_serving
-async def shutdown():
+async def _shutdown():
     db.close()
 
 @app.route('/')
@@ -40,19 +40,19 @@ async def _simple_page():
 
 @app.route('/servers')
 @app.route('/servers/extra')
-async def servers():
-    return await render_template(f'servers{"-extra" if "extra" in request.path else ""}.html', servers=srv.servers, time=srv.timestamp, curtime=int(time.time()))
+async def _servers():
+    return await render_template(f'servers{"-extra" if "extra" in request.path else ""}.html', servers=srv.servers, time=srv.timestamp)
 
 @app.route('/gmod')
 @app.route('/tf2')
 @app.route('/mc')
 async def _game_page():
-    return await render_template(f'servers/{request.path[1:]}.html', servers=srv.servers, time=srv.timestamp)
+    return await render_template(f'servers/{request.path[1:]}.html', servers=srv.servers, server_keys=srv.xtra.server_keys, time=srv.timestamp)
 
 @app.route('/motd', defaults={'game': None})
 @app.route('/motd/<game>')
 async def _motd(game):
-    return await render_template('servers/motd.html', game=game, have_pages=srv.xtra.have_pages)
+    return await render_template('servers/motd.html', game=game, server_keys=srv.xtra.server_keys, time=srv.timestamp)
 
 @app.route('/connect/<server>')
 async def _server_connect(server):
@@ -87,18 +87,18 @@ async def _redirect_minecraft():
     return redirect("/mc", code=301)
 
 @app.route('/homunculus')
-async def homunculus():
+async def _homunculus():
     return await send_from_directory(app.static_folder, "img/homunculus.png")
 
 @app.route('/sitemap.xml')
 @app.route('/robots.txt')
 @app.route('/favicon.ico')
-async def static_from_root():
+async def _static_from_root():
     return await send_from_directory(app.static_folder, request.path[1:])
 
 @app.errorhandler(404)
 @app.errorhandler(500)
-async def error_handler(error):
+async def _error_handler(error):
     response = quart.Response(await render_template('error.html', errors={
         404: ["[404] page not found", "the url youre trying to access does not exist! you likely followed a dead link or typed something wrong"],
         500: ["[500] internal server error", "somewhere along the way there was an error processing your request. if this keeps happening, please get in contact asap!",],

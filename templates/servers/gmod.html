@@ -10,11 +10,11 @@
 	<h1>my gmod servers</h1>
 	
 	<div class="servers">
-	{%- for server in ("gmodA", "gmodB", "sandbox") %}
+	{%- for server in server_keys["gmod"] %}
 		<span>
-			<a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
-			{% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
-			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}
+			<a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" alt="about {{server}}" width="265" height="31"/></a>
+			{% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
+			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>{% endif %}
 		</span>
 	{%- endfor %}
 	</div>
@@ -25,8 +25,8 @@
 	
 	<p><b>these addons are required to play!</b></p>
 
-		<a class="btn" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2085165984">gamemode addons</a>
 		<a class="btn" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2084328429">sandbox addons</a>
+		<a class="btn" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2085165984">gamemode addons</a>
 
 	<p>(optional) <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3363234147">missing texture fix</a></p>
 

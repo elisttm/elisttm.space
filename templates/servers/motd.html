@@ -4,17 +4,30 @@
 	<meta name="robots" content="noindex">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<style>
-		html, body {height: 100vh;}
-		body, h1, h2 {margin: 0; padding: 0; text-align: center; font-family: monospace;}
-		main {margin-top: 64px;}
+		html, body, main {max-height: 100vh;}
+		body, h1, h2, h3 {margin: 0; padding: 0; text-align: center; font-family: monospace; overflow: hidden;}
+		main {margin-top: 32px;}
+		.servers {width: 265px; background-color: #000; padding: 4px;}
+		.top, .image, .servers {margin: 16px auto;}
+		.image {margin-top: 5vh}
 		* {color: #fff}
 	</style>
 </head>
 <body style="background: #000 url('/static/img/bg/stars3.gif')"><main>
+	<div class="top">
 	<h1>welcome to my {% if game %}{{game}} {% endif %}server :3</h1>
-	<br><h2>visit
-		{%- if game in have_pages %} <a href="/{{game}}">elisttm.space/{{game}}</a>
+		{%- if game in server_keys %}
+		<div class="servers">
+		{%- for server in server_keys[game] %}
+			<img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/>
+		{%- endfor %}
+		</div>
+		{% else %}<br><br>
+		{%- endif %}
+	<h3>visit
+		{%- if game in server_keys %} <a href="/{{game}}">elisttm.space/{{game}}</a>
 		{%- else %} <a href="/servers">elisttm.space/servers</a>
-		{%- endif %} for more info!</h2><br>
-	<br><img src="/static/img/silly/hamster.gif" style="width:auto; height:60vh; margin:0 auto;">
+		{%- endif %} for more info!</h3><br>
+	</div>
+	<div class="image"><img src="/static/img/silly/hamster.gif"></div>
 </main></body></html>

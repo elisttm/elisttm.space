@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}my tf2 server{% endblock %}
-{% block desc %}info related to my tf2 server(s){% endblock %}
+{% block title %}my tf2 servers{% endblock %}
+{% block desc %}info related to my tf2 servers{% endblock %}
 
 {% block background %}tf2.gif{% endblock %}
 
 {% block content %}
 
-	<h1>my tf2 server</h1>
+	<h1>my tf2 servers</h1>
 	
     <div class="servers">
-    {%- for server in ("tf2A", "tf2B") %}
+    {%- for server in server_keys["tf2"] %}
         <span>
-            <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
-            {% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
-            {%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}
+            <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" alt="about {{server}}" width="265" height="31"/></a>
+			{% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
+			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>{% endif %}
         </span>
 	{%- endfor %}
     </div>

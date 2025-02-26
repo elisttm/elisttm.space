@@ -15,11 +15,11 @@
     </p>
 
     <div class="servers">
-    {%- for server in ("gmodA", "gmodB", "sandbox", "tf2A", "tf2B", "hl2mp", "hldm") %}
+    {%- for server in ("sandbox", "gmoda", "gmodb", "tf2a", "tf2b", "hl2mp", "hldm") %}
         <span>
-            <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
-            {% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" width="60" height="31"/>
-            {%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" width="60" height="31"/></a>{% endif %}
+            <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" alt="about {{server}}" width="265" height="31"/></a>
+			{% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
+			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>{% endif %}
         </span>
             
     {%- endfor %}
@@ -29,5 +29,6 @@
 
     <a class="btn" href="/gmod">gmod info &amp; addons</a>
     <a class="btn" href="/tf2">tf2 server info</a>
+    <a class="btn" href="/mc">mc server info</a>
 
 {% endblock %}

@@ -10,8 +10,8 @@
 	<h1>minecraft servers</h1>
 	
 	<div class="servers">
-	{%- for server in ("smp", "creative") %}
-        <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/></a>
+	{%- for server in server_keys["mc"] %}
+        <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" alt="about {{server}}" width="265" height="31"/></a>
 	{%- endfor %}
 	</div>
 
