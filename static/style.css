@@ -29,9 +29,9 @@ img, span, .inline {display: inline-block; vertical-align: middle;}
 .btn:hover, nav > a:hover {border-style: inset}
 
 .buttons {margin: 8px 0;}
-.buttons span {width: 31px; height: 31px; margin: 16px 1px;}
-.buttons img {width: 88px; height: 31px; margin: 2px 1px;}
-.buttons > a > *:hover {margin: 0; border: 1px solid #fff;}
+.socials {margin: 16px 1px 24px;}
+.buttons img {margin: 1px 1px;}
+.buttons > a > img:hover {margin: 0; border: 1px solid #fff;}
 
 .servers {margin: 24px 0 16px;}
 .servers img {margin: 1px -1px}

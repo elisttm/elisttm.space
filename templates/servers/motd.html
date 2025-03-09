@@ -16,14 +16,15 @@
 <body style="background: #000 url('/static/img/bg/stars3.gif')"><main>
 	<div class="top">
 	<h1>welcome to my {% if game %}{{game}} {% endif %}server :3</h1>
-		{%- if game in server_keys %}
-		<div class="servers">
+	{%- if game in server_keys %}
+	<div class="servers">
 		{%- for server in server_keys[game] %}
-			<img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/>
+		<img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" width="265" height="31"/>
 		{%- endfor %}
-		</div>
-		{% else %}<br><br>
-		{%- endif %}
+	</div>
+	{% else %}<br><br>
+	{%- endif %}
+	<h3>join my <a href="https://discord.gg/chVeByf6uP">discord server!</h3><br>
 	<h3>visit
 		{%- if game in server_keys %} <a href="/{{game}}">elisttm.space/{{game}}</a>
 		{%- else %} <a href="/servers">elisttm.space/servers</a>

@@ -34,6 +34,7 @@ async def _index():
 @app.route('/eli')
 @app.route('/bot')
 @app.route('/pack')
+@app.route('/donate')
 @app.route('/pages')
 async def _simple_page():
     return await render_template(f'{request.path[1:]}.html')
