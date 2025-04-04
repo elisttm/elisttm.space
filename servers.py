@@ -109,13 +109,6 @@ class xtra:
         return "Team Fortress 2"
 
 class server_info(object):
-    max_players = 0
-    player_count = 0
-    player_list = []
-    subtitleA = ""
-    subtitleB = ""
-    map_name = ""
-    gamemode = ""
     def __init__(self, player_count, max_players, player_list, map_name, gamemode, subtitleA, subtitleB):
         self.player_count = player_count
         self.max_players = max_players

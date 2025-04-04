@@ -22,6 +22,7 @@
 <div class="main">
     
     <h1>{{info["name"]}}</h1>
+    
     {%- if info["query"] %}
     <br><b>
         <span class="info">{{xtra.full_names[info["game"]]}}</span>
@@ -30,8 +31,12 @@
         {%- elif info["game"] == "mc" %}<span class="info">{{info["query"].subtitleB }}</span>
     {% endif %}
     </b><br>
+    {%- else %}
+
+    <h2 style="color:#F00">!!! SERVER OFFLINE !!!</h2>
+
     {%- endif %}
-    {%- if info["query"] %}
+
     <p>
     {%- if info["game"] in xtra.source_games %}
         <code>e.elisttm.space:{{info["ip"][1]}}</code><br>
@@ -46,6 +51,7 @@
     {%- endif %}
         <a class="btn" href="/servers">back to serverlist</a>
 
+    {%- if info["query"] %}
     <br><br><hr><br>
     {%- if not info["query"].player_list %}
     <h2>no players online!</h2>
@@ -73,13 +79,6 @@
 
     {%- endif%}
     {%- endif%}
-        
-    {%- else %}
-    <p>
-        this server is currently offline!
-        <br><br>
-        please check back later...
-    </p>
     {%- endif%}
     
 </div>

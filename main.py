@@ -1,4 +1,4 @@
-import os, asyncio, quart, hypercorn, sqlite3, time
+import os, asyncio, quart, hypercorn, sqlite3
 from quart import request, redirect, render_template, send_from_directory
 import servers as srv
 
@@ -40,9 +40,9 @@ async def _simple_page():
     return await render_template(f'{request.path[1:]}.html')
 
 @app.route('/servers')
-@app.route('/servers/extra')
+@app.route('/servers/all')
 async def _servers():
-    return await render_template(f'servers{"-extra" if "extra" in request.path else ""}.html', servers=srv.servers, time=srv.timestamp)
+    return await render_template(f'servers{"-all" if "all" in request.path else ""}.html', servers=srv.servers, time=srv.timestamp)
 
 @app.route('/gmod')
 @app.route('/tf2')

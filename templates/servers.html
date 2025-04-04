@@ -15,7 +15,7 @@
     </p>
 
     <div class="servers">
-    {%- for server in ("sandbox", "gmoda", "gmodb", "tf2a", "tf2b", "hl2mp", "hldm") %}
+    {%- for server in ("sandbox", "gmoda", "gmodb", "tf2a", "tf2b", "hldm", "sven") %}
         <span>
             <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" alt="about {{server}}" width="265" height="31"/></a>
 			{% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
@@ -25,7 +25,7 @@
     {%- endfor %}
     </div>
         
-        <p><a href="/servers/extra">full serverlist</a></p>
+        <p><a href="/servers/all">full serverlist</a></p>
 
     <a class="btn" href="/gmod">gmod info &amp; addons</a>
     <a class="btn" href="/tf2">tf2 server info</a>
