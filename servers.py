@@ -1,4 +1,4 @@
-import os, a2s, mcstatus, time, asyncio
+import os, a2s, mcstatus, time, asyncio, requests
 from PIL import Image, ImageFont, ImageDraw
 
 ip = "73.207.108.187"
@@ -62,7 +62,12 @@ servers = {
         "game": "mc",
         "name": "creative server",
         "ip": "creative.elisttm.space",
-    }
+    },
+    "eldewrito": {
+        "game": "halo",
+        "name": "eli halo server",
+        "ip": (ip, 11775),
+    },
 }
 
 class xtra:
@@ -73,7 +78,6 @@ class xtra:
         "gmod": ("sandbox", "gmoda", "gmodb"),
         "tf2": ("tf2a", "tf2b", "tf2z"),
         "mc": ("creative", "smp"),
-        "hl2mp": ("hl2mp"),
     }
     
     full_names = {
@@ -83,6 +87,7 @@ class xtra:
         "hldm":  "Half-Life: Deathmatch",
         "sven":  "Sven-Coop",
         "mc":    "Minecraft",
+        "halo":  "Halo Online 0.7.1",
     }
     
     def tf2_gamemode(map_name):
@@ -136,6 +141,14 @@ def seconds(sec:int):
 def truncate_str(string, length):
     return (string[:length] + "...") if len(string) > length else string
 
+def parse_json(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException:
+        raise(TimeoutError)
+
 def query_server(server):
     game = servers[server]["game"]
     ip = servers[server]["ip"]
@@ -160,6 +173,18 @@ def query_server(server):
                 for player in q.players.sample:
                     playerlist.append({"name": player.name,})
             return server_info(q.players.online, q.players.max, playerlist, None, None, ip, q.version.name)
+
+        elif game == "halo":
+            q = parse_json(f"http://{':'.join(map(str, servers[server]['ip']))}")
+            subtitleA = truncate_str(q["variant"], 24) if q["status"] == "InGame" else "in lobby..."
+            subtitleB = truncate_str(q["map"], 18) if q["status"] == "InGame" else ""
+            for player in q["players"]:
+                playerlist.append({
+                    "name": player["name"],
+                    "kills": player["kills"],
+                    "deaths": player["deaths"],
+                })
+            return server_info(q["numPlayers"], q["maxPlayers"], playerlist, q["map"], subtitleA, subtitleA, subtitleB)
         
     except (TimeoutError, ConnectionRefusedError):
         raise TimeoutError("server offline")

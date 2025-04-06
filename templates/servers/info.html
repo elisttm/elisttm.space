@@ -12,7 +12,7 @@
         th {padding-bottom: 12px;}
         .score {width: 50px;}
         .time {width: 100px;}
-        .score, .time {padding-left: 16px; text-align: right;}
+        .p2, .p3 {padding-left: 16px; text-align: right;}
         .info {margin: 0 16px;}
         .players, table {font-family: monospace; font-size: 1.15em;}
         h1, h2, h3, p {margin-left: 0; margin-right: 0}
@@ -26,7 +26,7 @@
     {%- if info["query"] %}
     <br><b>
         <span class="info">{{xtra.full_names[info["game"]]}}</span>
-        {%- if info["game"] == "gmod" %}<span class="info">{{info["query"].gamemode}}</span><span class="info">{{info["query"].map_name}}</span>
+        {%- if info["game"] in ["gmod", "halo"]%}<span class="info">{{info["query"].gamemode}}</span><span class="info">{{info["query"].map_name}}</span>
         {%- elif info["game"] in xtra.source_games %}<span class="info">{{info["query"].map_name}}</span>
         {%- elif info["game"] == "mc" %}<span class="info">{{info["query"].subtitleB }}</span>
     {% endif %}
@@ -56,28 +56,20 @@
     {%- if not info["query"].player_list %}
     <h2>no players online!</h2>
     {%- else %}
+    
     <h2>{{info["query"].player_count}} / {{info["query"].max_players}} players online!</h2>
 
-    {%- if info["game"] in xtra.source_games %}
     <table>
         <tr>
-            <th>NAME</th><th class="score">SCORE</th><th class="time">TIME</th>
+        {%- for key in info["query"].player_list[0].keys() %}
+            <th class="{{key}} p{{loop.index}}">{{ key }}</th>{%- endfor %}
         </tr>
         {%- for player in info["query"].player_list %}<tr>
-            <td>{{player["name"]}}</td>
-            <td class="score">{{player["score"]}}</td>
-            <td class="time">{{player["time"]}}</td>
-        </tr>{%- endfor%}
+            {%- for key in info["query"].player_list[0].keys() %}
+            <td class="{{key}} p{{loop.index}}">{{player[key]}}</td>
+            {%- endfor%}</tr>{%- endfor%}
     </table>
 
-    {%- else %}
-        <p class="players">
-        {%- for player in info["query"].player_list %}
-            {{player["name"]}}<br>
-        {%- endfor %}
-        </p>
-
-    {%- endif%}
     {%- endif%}
     {%- endif%}
     

@@ -42,7 +42,7 @@ async def _simple_page():
 @app.route('/servers')
 @app.route('/servers/all')
 async def _servers():
-    return await render_template(f'servers{"-all" if "all" in request.path else ""}.html', servers=srv.servers, time=srv.timestamp)
+    return await render_template(f'servers{"-all" if "all" in request.path else ""}.html', servers=srv.servers, time=srv.timestamp, source_games=srv.xtra.source_games)
 
 @app.route('/gmod')
 @app.route('/tf2')
