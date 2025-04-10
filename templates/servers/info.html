@@ -6,14 +6,14 @@
     <title>server info ({{game}})</title>
     <style>
         .main {margin-top: 64px; padding: 32px 0 32px;}
-        code {font-size: 1.25em; line-height: 2}
+        code {font-size: 1.25em; line-height: 2; text-align: center;}
         table {width: 75%; margin: 24px auto 8px; overflow: hidden; white-space: nowrap; border-collapse: collapse; text-align: left;}
         td {padding-bottom: 8px;}
         th {padding-bottom: 12px;}
-        .score {width: 50px;}
+        .score, .kills, .deaths, .frags {width: 50px;}
         .time {width: 100px;}
         .p2, .p3 {padding-left: 16px; text-align: right;}
-        .info {margin: 0 16px;}
+        .info {margin: 8px 16px;}
         .players, table {font-family: monospace; font-size: 1.15em;}
         h1, h2, h3, p {margin-left: 0; margin-right: 0}
     </style>
@@ -26,9 +26,9 @@
     {%- if info["query"] %}
     <br><b>
         <span class="info">{{xtra.full_names[info["game"]]}}</span>
-        {%- if info["game"] in ["gmod", "halo"]%}<span class="info">{{info["query"].gamemode}}</span><span class="info">{{info["query"].map_name}}</span>
-        {%- elif info["game"] in xtra.source_games %}<span class="info">{{info["query"].map_name}}</span>
-        {%- elif info["game"] == "mc" %}<span class="info">{{info["query"].subtitleB }}</span>
+        {%- if info["game"] in ("gmod", "halo")%}<span class="info">{{info["query"].gamemode}}</span><span class="info">{{info["query"].map_name}}</span>
+        {%- elif info["game"] == "mc" %}<span class="info">{{ info["query"].subtitleB }}</span>
+        {%- elif info["game"] in xtra.source_games or ("quake") %}<span class="info">{{info["query"].map_name}}</span>
     {% endif %}
     </b><br>
     {%- else %}
@@ -39,11 +39,16 @@
 
     <p>
     {%- if info["game"] in xtra.source_games %}
-        <code>e.elisttm.space:{{info["ip"][1]}}</code><br>
+        <code>connect e.elisttm.space:{{info["ip"][1]}}{% if info["password"] %}; password {{ info["password"] }}{% endif %}</code><br>
         <h2><a class="btn" href="/connect/{{game}}">click here to connect!</a></h2>
     {%- elif info["game"] == "mc" %}
         add the IP to your server browser to join!<br>
-        <code>{{ info["query"].subtitleA }}</code>
+        <code>{{ info["ip"] }}</code>
+    {%- elif info["game"] == "halo" %}
+        download at <a href="https://www.eldewrito.org/">eldewrito.org</a>!
+    {%- elif info["game"] == "quake" %}
+        join with <a href="https://ezquake.com/">ezquake</a>!<br>
+        <code>connect e.elisttm.space:{{info["ip"][1]}}</code>
     {%- endif %}
     </p>
     {%- if info["game"] in xtra.have_pages %}

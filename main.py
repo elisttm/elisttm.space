@@ -13,10 +13,11 @@ app.config["BACKGROUND_TASK_SHUTDOWN_TIMEOUT "] = 0
 
 @app.before_serving
 async def _startup():
-    app.add_background_task = asyncio.ensure_future(srv.draw_banners())
+    app.add_background_task = asyncio.create_task(srv.draw_banners())
 
 @app.after_serving
 async def _shutdown():
+    srv.running = False
     db.close()
 
 @app.route('/')

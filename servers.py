@@ -1,5 +1,9 @@
-import os, a2s, mcstatus, time, asyncio, requests
+import os, a2s, mcstatus, time, asyncio, requests, subprocess, json
 from PIL import Image, ImageFont, ImageDraw
+
+running = True
+path = os.path.dirname(os.path.realpath(__file__))+'/' # still stupid
+timestamp = 0
 
 ip = "73.207.108.187"
 servers = {
@@ -7,6 +11,7 @@ servers = {
         "game": "gmod",
         "name": "eli sandbox server",
         "ip": (ip, 27017),
+        "password": "chungus",
     },
     "gmoda": {
         "game": "gmod",
@@ -53,6 +58,11 @@ servers = {
         "name": "eli sven coop",
         "ip": (ip, 27040),
     },
+    "synergy": {
+        "game": "synergy",
+        "name": "eli synergy server",
+        "ip": (ip, 27038),
+    },
     "smp": {
         "game": "mc",
         "name": "eli smp",
@@ -68,15 +78,24 @@ servers = {
         "name": "eli halo server",
         "ip": (ip, 11775),
     },
+    "quake": {
+        "game": "quake",
+        "name": "eli qw server",
+        "ip": (ip, 27049),
+    }
+}
+
+qstat_games = {
+    "quake": "qws",
 }
 
 class xtra:
-    source_games = ("gmod", "tf2", "hl2mp", "hldm", "sven")
+    source_games = ("gmod", "tf2", "hl2mp", "synergy", "hldm", "sven")
     have_pages = ("gmod", "tf2", "mc")
 
     server_keys = {
         "gmod": ("sandbox", "gmoda", "gmodb"),
-        "tf2": ("tf2a", "tf2b", "tf2z"),
+        "tf2": ("tf2a", "tf2b"),
         "mc": ("creative", "smp"),
     }
     
@@ -88,6 +107,7 @@ class xtra:
         "sven":  "Sven-Coop",
         "mc":    "Minecraft",
         "halo":  "Halo Online 0.7.1",
+        "quake": "QuakeWorld",
     }
     
     def tf2_gamemode(map_name):
@@ -123,10 +143,6 @@ class server_info(object):
         self.subtitleA = subtitleA
         self.subtitleB = subtitleB
 
-
-path = os.path.dirname(os.path.realpath(__file__))+'/' # still stupid
-timestamp = 0
-
 def seconds(sec:int):
     min = hr = 0
     x = f"{sec}s"
@@ -143,11 +159,19 @@ def truncate_str(string, length):
 
 def parse_json(url):
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=0.2)
         response.raise_for_status()
         return response.json()
-    except requests.exceptions.RequestException:
+    except Exception:
         raise(TimeoutError)
+
+def qstat_query(server_address, game):
+    qstat_args = ['qstat','-json','-ts','-P',f'-{qstat_games[game]}',server_address]
+    try:
+        result = subprocess.run(qstat_args, capture_output=True, text=True, check=True)
+        return json.loads(result.stdout)[0]
+    except Exception as e:
+        return f"QSTAT ERROR: {e}"
 
 def query_server(server):
     game = servers[server]["game"]
@@ -155,7 +179,7 @@ def query_server(server):
     playerlist = []
     try:
         if game in xtra.source_games:
-            q = a2s.info(ip, 0.2)
+            q = a2s.info(ip, 0.15)
             if q.player_count > 0:
                 for player in a2s.players(ip):
                     playerlist.append({
@@ -168,28 +192,40 @@ def query_server(server):
             return server_info(q.player_count, q.max_players, playerlist, q.map_name, q.game, subtitleA, subtitleB)
         
         elif game == "mc":
-            q = mcstatus.JavaServer.lookup(ip, 0.2).status()
+            q = mcstatus.JavaServer.lookup(ip, 0.15).status()
             if q.players.sample:
                 for player in q.players.sample:
                     playerlist.append({"name": player.name,})
             return server_info(q.players.online, q.players.max, playerlist, None, None, ip, q.version.name)
 
+        elif game == "quake":
+            q = qstat_query(':'.join(map(str, ip)), game)
+            if q["players"]:
+                for player in q["players"]:
+                    playerlist.append({
+                        "name": player["name"],
+                        "frags": player["score"],
+                        "time": seconds(int(player["time"]))
+                    })
+            subtitleB = truncate_str(q["map"], 18)
+            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], None, "MVDSV 1.10", subtitleB)
+
         elif game == "halo":
-            q = parse_json(f"http://{':'.join(map(str, servers[server]['ip']))}")
-            subtitleA = truncate_str(q["variant"], 24) if q["status"] == "InGame" else "in lobby..."
-            subtitleB = truncate_str(q["map"], 18) if q["status"] == "InGame" else ""
+            q = parse_json(f"http://{':'.join(map(str, ip))}")
             for player in q["players"]:
                 playerlist.append({
-                    "name": player["name"],
+                    "name": f'[{player["serviceTag"]}] {player["name"]}',
                     "kills": player["kills"],
                     "deaths": player["deaths"],
                 })
+            subtitleA = truncate_str(q["variant"], 24) if q["status"] == "InGame" else "in lobby..."
+            subtitleB = truncate_str(q["map"], 18) if q["status"] == "InGame" else ""
             return server_info(q["numPlayers"], q["maxPlayers"], playerlist, q["map"], subtitleA, subtitleA, subtitleB)
-        
+
     except (TimeoutError, ConnectionRefusedError):
         raise TimeoutError("server offline")
     except Exception as e:
-        print(f"EXCEPTION in query_server({server}): {e}")
+        print(f"EXCEPTION in query_server({server}): {type(e).__name__} {e}")
         return None
 
 verdana = ImageFont.truetype(f"{path}static/Verdana-Bold.ttf", 11)
@@ -197,7 +233,8 @@ arial = ImageFont.truetype(f"{path}static/Arial.ttf", 10)
 
 async def draw_banners():
     global timestamp
-    while True:
+    global running
+    while running:
         for server in servers.copy():
             servers[server]["query"] = None
             try:
@@ -220,4 +257,4 @@ async def draw_banners():
             draw.text((35, 1), servers[server]['name'], "white", verdana)
             img.save(f"{path}static/img/servers/banner-{server}.gif")
         timestamp = int(time.time())
-        await asyncio.sleep(60)
+        await asyncio.sleep(30)
