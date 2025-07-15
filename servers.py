@@ -1,9 +1,11 @@
-import os, a2s, mcstatus, time, asyncio, requests, subprocess, json
+import os, a2s, mcstatus, time, asyncio, requests, subprocess, json, traceback
 from PIL import Image, ImageFont, ImageDraw
 
 running = True
 path = os.path.dirname(os.path.realpath(__file__))+'/' # still stupid
 timestamp = 0
+
+qstat_bin = "/usr/bin/quakestat"
 
 ip = "73.207.108.187"
 servers = {
@@ -74,9 +76,14 @@ servers = {
         "ip": "creative.elisttm.space",
     },
     "eldewrito": {
-        "game": "halo",
+        "game": "eldewrito",
         "name": "eli halo server",
         "ip": (ip, 11775),
+    },
+    "haloce": {
+        "game": "halo",
+        "name": "eli haloce server",
+        "ip": (ip, 2302),
     },
     "quake": {
         "game": "quake",
@@ -87,6 +94,7 @@ servers = {
 
 qstat_games = {
     "quake": "qws",
+    "halo": "gs2",
 }
 
 class xtra:
@@ -100,14 +108,15 @@ class xtra:
     }
     
     full_names = {
-        "gmod":  "Garry's Mod",
-        "tf2":   "Team Fortress 2",
-        "hl2mp": "Half-Life 2: Deathmatch",
-        "hldm":  "Half-Life: Deathmatch",
-        "sven":  "Sven-Coop",
-        "mc":    "Minecraft",
-        "halo":  "Halo Online 0.7.1",
-        "quake": "QuakeWorld",
+        "gmod":      "Garry's Mod",
+        "tf2":       "Team Fortress 2",
+        "hl2mp":     "Half-Life 2: Deathmatch",
+        "hldm":      "Half-Life: Deathmatch",
+        "sven":      "Sven-Coop",
+        "mc":        "Minecraft",
+        "quake":     "QuakeWorld",
+        "eldewrito": "Halo Online 0.7.1",
+        "halo":      "Halo Custom Edition",
     }
     
     def tf2_gamemode(map_name):
@@ -154,7 +163,8 @@ def seconds(sec:int):
         x = f"{hr}h {min}m {sec}s"
     return x
 
-def truncate_str(string, length):
+def truncate_str(string:str, length):
+    string = str(string)
     return (string[:length] + "...") if len(string) > length else string
 
 def parse_json(url):
@@ -163,15 +173,15 @@ def parse_json(url):
         response.raise_for_status()
         return response.json()
     except Exception:
-        raise(TimeoutError)
+        raise TimeoutError("server offline")
 
 def qstat_query(server_address, game):
-    qstat_args = ['qstat','-json','-ts','-P',f'-{qstat_games[game]}',server_address]
-    try:
-        result = subprocess.run(qstat_args, capture_output=True, text=True, check=True)
-        return json.loads(result.stdout)[0]
-    except Exception as e:
-        return f"QSTAT ERROR: {e}"
+    qstat_args = [qstat_bin,'-json','-ts','-P','-R',f'-{qstat_games[game]}',server_address]
+    result = subprocess.run(qstat_args, capture_output=True, text=True, check=True)
+    result_json = json.loads(result.stdout)[0]
+    if result_json["status"] != "online":
+        raise TimeoutError("server offline")
+    return result_json
 
 def query_server(server):
     game = servers[server]["game"]
@@ -179,7 +189,7 @@ def query_server(server):
     playerlist = []
     try:
         if game in xtra.source_games:
-            q = a2s.info(ip, 0.15)
+            q = a2s.info(ip, 0.3)
             if q.player_count > 0:
                 for player in a2s.players(ip):
                     playerlist.append({
@@ -192,7 +202,7 @@ def query_server(server):
             return server_info(q.player_count, q.max_players, playerlist, q.map_name, q.game, subtitleA, subtitleB)
         
         elif game == "mc":
-            q = mcstatus.JavaServer.lookup(ip, 0.15).status()
+            q = mcstatus.JavaServer.lookup(ip, 0.3).status()
             if q.players.sample:
                 for player in q.players.sample:
                     playerlist.append({"name": player.name,})
@@ -200,32 +210,46 @@ def query_server(server):
 
         elif game == "quake":
             q = qstat_query(':'.join(map(str, ip)), game)
-            if q["players"]:
-                for player in q["players"]:
-                    playerlist.append({
-                        "name": player["name"],
-                        "frags": player["score"],
-                        "time": seconds(int(player["time"]))
-                    })
+            for player in q["players"]:
+                playerlist.append({
+                    "name": player["name"],
+                    "frags": player["score"],
+                    "time": seconds(int(player["time"]))
+                })
+            gametype = f'{q["rules"]["mode"].upper()} ({q["rules"]["status"]})'
             subtitleB = truncate_str(q["map"], 18)
-            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], None, "MVDSV 1.10", subtitleB)
+            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], gametype, q["rules"]["*version"], subtitleB)
 
         elif game == "halo":
+            q = qstat_query(':'.join(map(str, ip)), game)
+            for player in q["players"]:
+                playerlist.append({
+                    "name": player["name"],
+                    "score": player["score"],
+                })
+            subtitleA = truncate_str(q["gametype"], 24)
+            subtitleB = truncate_str(q["map"], 18)
+            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], q["gametype"], subtitleA, subtitleB)
+
+        elif game == "eldewrito":
             q = parse_json(f"http://{':'.join(map(str, ip))}")
             for player in q["players"]:
                 playerlist.append({
                     "name": f'[{player["serviceTag"]}] {player["name"]}',
                     "kills": player["kills"],
-                    "deaths": player["deaths"],
+                    "deaths": player["score"],
                 })
             subtitleA = truncate_str(q["variant"], 24) if q["status"] == "InGame" else "in lobby..."
             subtitleB = truncate_str(q["map"], 18) if q["status"] == "InGame" else ""
             return server_info(q["numPlayers"], q["maxPlayers"], playerlist, q["map"], subtitleA, subtitleA, subtitleB)
 
+        return None
+
     except (TimeoutError, ConnectionRefusedError):
         raise TimeoutError("server offline")
     except Exception as e:
         print(f"EXCEPTION in query_server({server}): {type(e).__name__} {e}")
+        #print(traceback.format_exc())
         return None
 
 verdana = ImageFont.truetype(f"{path}static/Verdana-Bold.ttf", 11)

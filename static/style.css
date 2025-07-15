@@ -13,7 +13,7 @@ nav > a:hover, nav > a:active {background-color: #000;}
 
 h1, h2, h3 {font-family: monospace}
 h1, h2, h3, p {margin: 16px 64px 16px;}
-p {text-align: justify; text-align-last: center; line-height: 1.25; word-spacing: 1px;}
+p {text-align: justify; text-align-last: center; line-height: 1.5; word-spacing: 1px;}
 p br {display: block; margin-top: 8px; content: ""}
 a {color: inherit; text-decoration: underline; cursor: url('/static/img/cursor-pointer.gif'), pointer;}
 

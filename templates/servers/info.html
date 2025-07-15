@@ -26,9 +26,9 @@
     {%- if info["query"] %}
     <br><b>
         <span class="info">{{xtra.full_names[info["game"]]}}</span>
-        {%- if info["game"] in ("gmod", "halo")%}<span class="info">{{info["query"].gamemode}}</span><span class="info">{{info["query"].map_name}}</span>
+        {%- if info["game"] in ("gmod", "eldewrito", "halo", "quake")%}<span class="info">{{info["query"].gamemode}}</span><span class="info">{{info["query"].map_name}}</span>
         {%- elif info["game"] == "mc" %}<span class="info">{{ info["query"].subtitleB }}</span>
-        {%- elif info["game"] in xtra.source_games or ("quake") %}<span class="info">{{info["query"].map_name}}</span>
+        {%- elif info["game"] in xtra.source_games %}<span class="info">{{info["query"].map_name}}</span>
     {% endif %}
     </b><br>
     {%- else %}
@@ -44,8 +44,10 @@
     {%- elif info["game"] == "mc" %}
         add the IP to your server browser to join!<br>
         <code>{{ info["ip"] }}</code>
-    {%- elif info["game"] == "halo" %}
+    {%- elif info["game"] == "eldewrito" %}
         download at <a href="https://www.eldewrito.org/">eldewrito.org</a>!
+    {%- elif info["game"] == "halo" %}
+        <code>e.elisttm.space:{{info["ip"][1]}}</code>
     {%- elif info["game"] == "quake" %}
         join with <a href="https://ezquake.com/">ezquake</a>!<br>
         <code>connect e.elisttm.space:{{info["ip"][1]}}</code>
@@ -72,7 +74,8 @@
         {%- for player in info["query"].player_list %}<tr>
             {%- for key in info["query"].player_list[0].keys() %}
             <td class="{{key}} p{{loop.index}}">{{player[key]}}</td>
-            {%- endfor%}</tr>{%- endfor%}
+            {%- endfor%}</tr>
+        {%- endfor%}
     </table>
 
     {%- endif%}
