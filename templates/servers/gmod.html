@@ -12,7 +12,7 @@
 	<div class="servers">
 	{%- for server in server_keys["gmod"] %}
 		<span>
-			<a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{time}}" alt="about {{server}}" width="265" height="31"/></a>
+			<a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{servers[server]["time"]}}" alt="about {{server}}" width="265" height="31"/></a>
 			{% if not servers[server]["query"] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
 			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>{% endif %}
 		</span>

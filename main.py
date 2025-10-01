@@ -43,18 +43,18 @@ async def _simple_page():
 @app.route('/servers')
 @app.route('/servers/all')
 async def _servers():
-    return await render_template(f'servers{"-all" if "all" in request.path else ""}.html', servers=srv.servers, time=srv.timestamp, source_games=srv.xtra.source_games)
+    return await render_template(f'servers{"-all" if "all" in request.path else ""}.html', servers=srv.servers, source_games=srv.xtra.source_games)
 
 @app.route('/gmod')
 @app.route('/tf2')
 @app.route('/mc')
 async def _game_page():
-    return await render_template(f'servers/{request.path[1:]}.html', servers=srv.servers, server_keys=srv.xtra.server_keys, time=srv.timestamp)
+    return await render_template(f'servers/{request.path[1:]}.html', servers=srv.servers, server_keys=srv.xtra.server_keys)
 
 @app.route('/motd', defaults={'game': None})
 @app.route('/motd/<game>')
 async def _motd(game):
-    return await render_template('servers/motd.html', game=game, server_keys=srv.xtra.server_keys, time=srv.timestamp)
+    return await render_template('servers/motd.html', game=game, servers=srv.servers, server_keys=srv.xtra.server_keys)
 
 @app.route('/connect/<server>')
 async def _server_connect(server):
@@ -67,7 +67,7 @@ async def _server_info(server):
     if server not in srv.servers:
         return quart.abort(404)
     info = srv.servers[server]
-    return await render_template('servers/info.html', game=server, info=info, time=srv.timestamp, xtra=srv.xtra)
+    return await render_template('servers/info.html', game=server, info=info, xtra=srv.xtra)
 
 @app.route('/index.html')
 async def _redirect_index():

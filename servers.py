@@ -60,11 +60,6 @@ servers = {
         "name": "eli sven coop",
         "ip": (ip, 27040),
     },
-    "synergy": {
-        "game": "synergy",
-        "name": "eli synergy server",
-        "ip": (ip, 27038),
-    },
     "smp": {
         "game": "mc",
         "name": "eli smp",
@@ -98,7 +93,7 @@ qstat_games = {
 }
 
 class xtra:
-    source_games = ("gmod", "tf2", "hl2mp", "synergy", "hldm", "sven")
+    source_games = ("gmod", "tf2", "hl2mp", "hldm", "sven")
     have_pages = ("gmod", "tf2", "mc")
 
     server_keys = {
@@ -151,6 +146,11 @@ class server_info(object):
         self.gamemode = gamemode
         self.subtitleA = subtitleA
         self.subtitleB = subtitleB
+
+    def __eq__(self, other):
+        if not other:
+            return False
+        return self.__dict__ == other.__dict__
 
 def seconds(sec:int):
     min = hr = 0
@@ -252,6 +252,11 @@ def query_server(server):
         #print(traceback.format_exc())
         return None
 
+# populates servers dict with extra keys
+for server in servers:
+    servers[server]["query"] = None
+    servers[server]["timestamp"] = None
+
 verdana = ImageFont.truetype(f"{path}static/Verdana-Bold.ttf", 11)
 arial = ImageFont.truetype(f"{path}static/Arial.ttf", 10)
 
@@ -259,13 +264,14 @@ async def draw_banners():
     global timestamp
     global running
     while running:
+        timestamp = int(time.time())
         for server in servers.copy():
-            servers[server]["query"] = None
             try:
                 query = query_server(server)
-                if not query:
+                if not query or query == servers[server]["query"]:
                     continue
                 servers[server]["query"] = query
+                servers[server]["time"] = timestamp
                 img = Image.open(f"{path}static/img/servers/template-{servers[server]["game"]}.gif")
                 draw = ImageDraw.Draw(img)
                 draw.text((162, 1), f"{query.player_count}/{query.max_players}", "white", verdana)
@@ -280,5 +286,4 @@ async def draw_banners():
                 draw = ImageDraw.Draw(img)
             draw.text((35, 1), servers[server]['name'], "white", verdana)
             img.save(f"{path}static/img/servers/banner-{server}.gif")
-        timestamp = int(time.time())
         await asyncio.sleep(30)
