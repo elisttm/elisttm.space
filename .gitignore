@@ -3,6 +3,7 @@
 .notes
 **.sh
 **.db
+**.dat
 **.journal
 
 **/servers/banner-*

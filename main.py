@@ -1,4 +1,4 @@
-import os, asyncio, quart, hypercorn, sqlite3
+import os, asyncio, quart, hypercorn, sqlite3, pickle
 from quart import request, redirect, render_template, send_from_directory
 import servers as srv
 
@@ -9,11 +9,11 @@ cur = db.cursor()
 cur.execute("CREATE TABLE IF NOT EXISTS HITS (hits)")
 
 app = quart.Quart(__name__)
-app.config["BACKGROUND_TASK_SHUTDOWN_TIMEOUT "] = 0
 
-@app.before_serving
-async def _startup():
-    app.add_background_task = asyncio.create_task(srv.draw_banners())
+server_info = srv.server_info
+def get_queries():
+    with open("servers.dat", "rb") as f:
+        return pickle.load(f)
 
 @app.after_serving
 async def _shutdown():
@@ -43,18 +43,18 @@ async def _simple_page():
 @app.route('/servers')
 @app.route('/servers/all')
 async def _servers():
-    return await render_template(f'servers{"-all" if "all" in request.path else ""}.html', servers=srv.servers, source_games=srv.xtra.source_games)
+    return await render_template(f'servers{"-all" if "all" in request.path else ""}.html', servers=srv.servers, queries=get_queries(), source_games=srv.xtra.source_games)
 
 @app.route('/gmod')
 @app.route('/tf2')
 @app.route('/mc')
 async def _game_page():
-    return await render_template(f'servers/{request.path[1:]}.html', servers=srv.servers, server_keys=srv.xtra.server_keys)
+    return await render_template(f'servers/{request.path[1:]}.html', servers=srv.servers, queries=get_queries(), server_keys=srv.xtra.server_keys)
 
 @app.route('/motd', defaults={'game': None})
 @app.route('/motd/<game>')
 async def _motd(game):
-    return await render_template('servers/motd.html', game=game, servers=srv.servers, server_keys=srv.xtra.server_keys)
+    return await render_template('servers/motd.html', game=game, servers=srv.servers, queries=get_queries(), server_keys=srv.xtra.server_keys)
 
 @app.route('/connect/<server>')
 async def _server_connect(server):
@@ -66,8 +66,7 @@ async def _server_connect(server):
 async def _server_info(server):
     if server not in srv.servers:
         return quart.abort(404)
-    info = srv.servers[server]
-    return await render_template('servers/info.html', game=server, info=info, xtra=srv.xtra)
+    return await render_template('servers/info.html', game=server, info=srv.servers[server], query=get_queries()[server], xtra=srv.xtra)
 
 @app.route('/index.html')
 async def _redirect_index():

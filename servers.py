@@ -1,4 +1,4 @@
-import os, a2s, mcstatus, time, asyncio, requests, subprocess, json, traceback
+import os, pickle, a2s, mcstatus, time, asyncio, requests, subprocess, json, traceback
 from PIL import Image, ImageFont, ImageDraw
 
 running = True
@@ -87,6 +87,8 @@ servers = {
     }
 }
 
+queries = {}
+
 qstat_games = {
     "quake": "qws",
     "halo": "gs2",
@@ -138,7 +140,7 @@ class xtra:
         return "Team Fortress 2"
 
 class server_info(object):
-    def __init__(self, player_count, max_players, player_list, map_name, gamemode, subtitleA, subtitleB):
+    def __init__(self, player_count, max_players, player_list, map_name, gamemode, subtitleA, subtitleB, timestamp):
         self.player_count = player_count
         self.max_players = max_players
         self.player_list = player_list
@@ -146,11 +148,16 @@ class server_info(object):
         self.gamemode = gamemode
         self.subtitleA = subtitleA
         self.subtitleB = subtitleB
+        self.timestamp = timestamp
 
     def __eq__(self, other):
         if not other:
             return False
-        return self.__dict__ == other.__dict__
+        eq_self = self.__dict__.copy()
+        eq_other = other.__dict__.copy()
+        del eq_self["timestamp"]
+        del eq_other["timestamp"]
+        return eq_self == eq_other
 
 def seconds(sec:int):
     min = hr = 0
@@ -183,7 +190,7 @@ def qstat_query(server_address, game):
         raise TimeoutError("server offline")
     return result_json
 
-def query_server(server):
+def query_server(server, timestamp):
     game = servers[server]["game"]
     ip = servers[server]["ip"]
     playerlist = []
@@ -199,14 +206,14 @@ def query_server(server):
                     })
             subtitleA = xtra.tf2_gamemode(q.map_name) if game == "tf2" else truncate_str(q.game, 24)
             subtitleB = truncate_str(q.map_name, 18)
-            return server_info(q.player_count, q.max_players, playerlist, q.map_name, q.game, subtitleA, subtitleB)
+            return server_info(q.player_count, q.max_players, playerlist, q.map_name, q.game, subtitleA, subtitleB, timestamp)
         
         elif game == "mc":
             q = mcstatus.JavaServer.lookup(ip, 0.3).status()
             if q.players.sample:
                 for player in q.players.sample:
                     playerlist.append({"name": player.name,})
-            return server_info(q.players.online, q.players.max, playerlist, None, None, ip, q.version.name)
+            return server_info(q.players.online, q.players.max, playerlist, None, None, ip, q.version.name, timestamp)
 
         elif game == "quake":
             q = qstat_query(':'.join(map(str, ip)), game)
@@ -218,7 +225,7 @@ def query_server(server):
                 })
             gametype = f'{q["rules"]["mode"].upper()} ({q["rules"]["status"]})'
             subtitleB = truncate_str(q["map"], 18)
-            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], gametype, q["rules"]["*version"], subtitleB)
+            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], gametype, q["rules"]["*version"], subtitleB, timestamp)
 
         elif game == "halo":
             q = qstat_query(':'.join(map(str, ip)), game)
@@ -229,7 +236,7 @@ def query_server(server):
                 })
             subtitleA = truncate_str(q["gametype"], 24)
             subtitleB = truncate_str(q["map"], 18)
-            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], q["gametype"], subtitleA, subtitleB)
+            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], q["gametype"], subtitleA, subtitleB, timestamp)
 
         elif game == "eldewrito":
             q = parse_json(f"http://{':'.join(map(str, ip))}")
@@ -241,7 +248,7 @@ def query_server(server):
                 })
             subtitleA = truncate_str(q["variant"], 24) if q["status"] == "InGame" else "in lobby..."
             subtitleB = truncate_str(q["map"], 18) if q["status"] == "InGame" else ""
-            return server_info(q["numPlayers"], q["maxPlayers"], playerlist, q["map"], subtitleA, subtitleA, subtitleB)
+            return server_info(q["numPlayers"], q["maxPlayers"], playerlist, q["map"], subtitleA, subtitleA, subtitleB, timestamp)
 
         return None
 
@@ -254,8 +261,7 @@ def query_server(server):
 
 # populates servers dict with extra keys
 for server in servers:
-    servers[server]["query"] = None
-    servers[server]["timestamp"] = None
+    queries[server] = None
 
 verdana = ImageFont.truetype(f"{path}static/Verdana-Bold.ttf", 11)
 arial = ImageFont.truetype(f"{path}static/Arial.ttf", 10)
@@ -267,23 +273,32 @@ async def draw_banners():
         timestamp = int(time.time())
         for server in servers.copy():
             try:
-                query = query_server(server)
-                if not query or query == servers[server]["query"]:
+                query = query_server(server, timestamp)
+                if not query or query == queries[server]:
                     continue
-                servers[server]["query"] = query
-                servers[server]["time"] = timestamp
+                print(f"updated {server}")
+                queries[server] = query
                 img = Image.open(f"{path}static/img/servers/template-{servers[server]["game"]}.gif")
                 draw = ImageDraw.Draw(img)
                 draw.text((162, 1), f"{query.player_count}/{query.max_players}", "white", verdana)
                 draw.text((35, 15.5), query.subtitleA, "white", arial)
                 draw.text((162, 15.5), query.subtitleB, "white", arial)
             except TimeoutError:
+                queries[server] = None
                 img = Image.open(f"{path}static/img/servers/template-offline.gif")
                 draw = ImageDraw.Draw(img)
             except Exception as e:
-                print(server, str(e))
+                queries[server] = None
+                print("error in draw_banners(): ", server, traceback.format_exc())
                 img = Image.open(f"{path}static/img/servers/template-error.gif")
                 draw = ImageDraw.Draw(img)
             draw.text((35, 1), servers[server]['name'], "white", verdana)
             img.save(f"{path}static/img/servers/banner-{server}.gif")
-        await asyncio.sleep(30)
+            with open("servers.dat", "wb") as f:
+                pickle.dump(queries, f)
+                
+        print("--- updated servers!")
+        await asyncio.sleep(10)
+
+if __name__ == "__main__":
+    asyncio.run(draw_banners())

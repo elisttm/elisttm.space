@@ -23,12 +23,12 @@
     
     <h1>{{info["name"]}}</h1>
     
-    {%- if info["query"] %}
+    {%- if query %}
     <br><b>
         <span class="info">{{xtra.full_names[info["game"]]}}</span>
-        {%- if info["game"] in ("gmod", "eldewrito", "halo", "quake")%}<span class="info">{{info["query"].gamemode}}</span><span class="info">{{info["query"].map_name}}</span>
-        {%- elif info["game"] == "mc" %}<span class="info">{{ info["query"].subtitleB }}</span>
-        {%- elif info["game"] in xtra.source_games %}<span class="info">{{info["query"].map_name}}</span>
+        {%- if info["game"] in ("gmod", "eldewrito", "halo", "quake")%}<span class="info">{{query.gamemode}}</span><span class="info">{{query.map_name}}</span>
+        {%- elif info["game"] == "mc" %}<span class="info">{{ query.subtitleB }}</span>
+        {%- elif info["game"] in xtra.source_games %}<span class="info">{{query.map_name}}</span>
     {% endif %}
     </b><br>
     {%- else %}
@@ -58,21 +58,21 @@
     {%- endif %}
         <a class="btn" href="/servers">back to serverlist</a>
 
-    {%- if info["query"] %}
+    {%- if query %}
     <br><br><hr><br>
-    {%- if not info["query"].player_list %}
+    {%- if not query.player_list %}
     <h2>no players online!</h2>
     {%- else %}
     
-    <h2>{{info["query"].player_count}} / {{info["query"].max_players}} players online!</h2>
+    <h2>{{query.player_count}} / {{query.max_players}} players online!</h2>
 
     <table>
         <tr>
-        {%- for key in info["query"].player_list[0].keys() %}
+        {%- for key in query.player_list[0].keys() %}
             <th class="{{key}} p{{loop.index}}">{{ key }}</th>{%- endfor %}
         </tr>
-        {%- for player in info["query"].player_list %}<tr>
-            {%- for key in info["query"].player_list[0].keys() %}
+        {%- for player in query.player_list %}<tr>
+            {%- for key in query.player_list[0].keys() %}
             <td class="{{key}} p{{loop.index}}">{{player[key]}}</td>
             {%- endfor%}</tr>
         {%- endfor%}

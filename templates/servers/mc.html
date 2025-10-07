@@ -11,7 +11,7 @@
 	
 	<div class="servers">
 	{%- for server in server_keys["mc"] %}
-        <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{servers[server]["time"]}}" alt="about {{server}}" width="265" height="31"/></a>
+        <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" alt="about {{server}}" width="265" height="31"/></a>
 	{%- endfor %}
 	</div>
 
