@@ -3,11 +3,6 @@ from quart import request, redirect, render_template, send_from_directory
 import servers as srv
 
 path = os.path.dirname(os.path.realpath(__file__))+'/' # stupid
-
-db = sqlite3.connect(f"{path}/data.db")
-cur = db.cursor()
-cur.execute("CREATE TABLE IF NOT EXISTS HITS (hits)")
-
 app = quart.Quart(__name__)
 
 server_info = srv.server_info
@@ -15,21 +10,9 @@ def get_queries():
     with open("servers.dat", "rb") as f:
         return pickle.load(f)
 
-@app.after_serving
-async def _shutdown():
-    srv.running = False
-    db.close()
-
 @app.route('/')
 async def _index():
-    try:
-        cur.execute("UPDATE HITS SET hits = hits + 1")
-        cur.execute("SELECT hits FROM HITS")
-        db.commit()
-        hits = cur.fetchone()[0]
-    except Exception:
-        hits = None
-    return await render_template('index.html', hits=hits)
+    return await render_template('index.html')
 
 @app.route('/projects')
 @app.route('/eli')

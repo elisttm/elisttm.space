@@ -9,24 +9,28 @@
 
 	<h1>my server</h1>
 		<p>
-			ive been running a personal "homelab" server in my bedroom since 2020.
-			i mainly use it for a plethora of <a href="/servers">game servers</a> and web servers, like this one!
-			a collection of scripts i use to manage my server can be found <a href="https://github.com/elisttm/server-utils">here.</a>
+			an old gaming pc turned homelab that's been running in my room since 2020.
+			i use it to host all sorts of things, most notably my <a href="/servers">game servers</a> and many web servers (see below!).
+			a repo of custom tools i use to manage my server can be found <a href="https://github.com/elisttm/server-utils">here.</a>
 		</p>
 
-	<img src="/static/img/neofetch.gif" width="407" height="177"><br>
+	<img src="/static/img/neofetch.gif" width="407" height="163"><br>
 
-	<h1>websites</h1>
-		<p>all of these were made in python (quart) as a backend (i love python...), proxied with caddy, all with zero javascript!</p>
-	<ul>
-		<li>elisttm.space (<a href="https://github.com/elisttm/elisttm.space">github</a>)</li>
-			my personal homepage for contacts and projects<br><br>
+	<h1>my website (<a href="https://github.com/elisttm/elisttm.space">github</a>)</h1>
+		<p>
+			the website you're on right now!
+			a simple silly personal homepage for showing off my projects and socials that i've maintained and updated continuously since ~2019.
+			<br>
+			it runs python (<a href="https://github.com/pallets/quart">quart</a>) on the backend and is proxied through <a href="https://caddyserver.com/">caddy</a>.
+			this site is intentionally stupidly over-optimized, from the lack of javascript to the bit-crushed images.
+			everything, including the auto-updating serverlist, is written to be as fast as possible!
+		</p>
 
-		<li><a href="https://featherk1ss.art">featherk1ss.art</a> (<a href="https://github.com/elisttm/featherk1ss.art">github</a>)</li>
-			a homepage + art gallery for a friend<br><br>
+	<h1>other websites</h1>
+		<ul style="margin-top: 0">
 
-		<li><a href="https://f.elisttm.space/u/eli">my fileserver</a> (<a href="https://github.com/elisttm/fileserver">github</a>)</li>
-			a lightweight and simple multi-user fileserver
-	</ul>
+			<li><a href="https://f.elisttm.space/u/eli">my fileserver</a> (<a href="https://github.com/elisttm/fileserver">github</a>)</li>
+				a simple js-free multi-user web fileserver, similar to <a href="https://github.com/9001/copyparty">copyparty</a> before it existed<br>
+		</ul>
 
 {% endblock %}

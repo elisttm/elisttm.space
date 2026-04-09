@@ -4,36 +4,37 @@
 body {font-family: sans-serif; text-align: center; color: #fff; padding: 0; margin: 0 auto; width: 600px;}
 
 .header, nav, .main {margin: 4px 0; overflow: hidden; box-sizing: border-box;}
+.main, nav > a, .btn {background-color: rgba(0,0,0,0.8); border: 4px outset #fff;}
+
 nav {display: flex; gap: 4px;}
-nav > a {font-family: "Trebuchet MS", sans-serif; padding: 8px; flex-basis: 20%; text-decoration: none; font-weight: bold; overflow: hidden;}
+nav > a {flex-basis: 20%; overflow: hidden;}
 nav > a:hover, nav > a:active {background-color: #000;}
-.main, nav > a {background-color: rgba(0,0,0,0.8); border: 4px outset #fff;}
+
+nav > a, .btn {font-family: "Tahoma", sans-serif; text-decoration: none; font-weight: bold; padding: 8px;}
+nav > a:hover, .btn:hover {border-style: inset}
+.btn {display: inline-block; font-size: 0.8em; margin: 8px 2px}
+
 .main {padding: 16px 0 24px;}
 .header {margin: 16px 0}
 
-h1, h2, h3 {font-family: monospace}
-h1, h2, h3, p {margin: 16px 64px 16px;}
-p {text-align: justify; text-align-last: center; line-height: 1.5; word-spacing: 1px;}
-p br {display: block; margin-top: 8px; content: ""}
-a {color: inherit; text-decoration: underline; cursor: url('/static/img/cursor-pointer.gif'), pointer;}
+h1, h2, h3 {margin: 16px 64px 16px; font-family: monospace}
+p {margin: 12px 64px 12px; text-align: justify; text-align-last: center; line-height: 1.5; word-spacing: 0.25px;}
+a {color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: url('/static/img/cursor-pointer.gif'), pointer;}
 
 ul, ol {display: inline-block; text-align: left; max-width: 80%}
 li {margin-bottom: 16px;}
 
 img {max-height: 100%; max-width: 100%; image-rendering: pixelated;}
-.main img {margin: 1px 0; border: 0;}
 img, span, .inline {display: inline-block; vertical-align: middle;}
-
-.btn {display: inline-block; border: 4px outset #bbb; background-color: #ddd; color: #000; font-size: 0.9em; text-decoration: none; padding: 4px; margin: 8px 2px}
+.main img {margin: 1px 0; border: 0;}
 .btn > img {margin: 0}
-.btn:hover, nav > a:hover {border-style: inset}
 
 .buttons {margin: 8px 0;}
-.socials {margin: 16px 1px 24px;}
+.socials {margin-bottom: 24px;}
 .buttons img {margin: 1px 1px;}
 .buttons > a > img:hover {margin: 0; border: 1px solid #fff;}
 
-.servers {margin: 24px 0 16px;}
+.servers {margin: 16px 0 8px;}
 .servers img {margin: 1px -1px}
 .servers > * {display: block;}
 .servers a > *:hover {margin: 0 -2px; border: 1px solid #fff;}

@@ -19,7 +19,7 @@
 	{%- if game in server_keys %}
 	<div class="servers">
 		{%- for server in server_keys[game] %}
-		<img src="/static/img/servers/banner-{{server}}.gif?t={{servers[server]["time"]}}" width="265" height="31"/>
+		<img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" width="265" height="31"/>
 		{%- endfor %}
 	</div>
 	{% else %}<br><br>

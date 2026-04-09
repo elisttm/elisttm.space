@@ -9,10 +9,11 @@
 
 	<h1>my game servers</h1>
 
-    <p>
-        these are most of my public game servers i host at home
-        <br>banners update every minute!
-    </p>
+    <p>a list of 24/7 public game servers that i host!</p>
+    
+    <a class="btn" href="/gmod">gmod info &amp; addons</a>
+    <a class="btn" href="/tf2">tf2 server info</a>
+    <a class="btn" href="/mc">mc server info</a>
 
     <div class="servers">
     {%- for server in ("sandbox", "gmoda", "gmodb", "tf2a", "tf2b", "hldm", "sven") %}
@@ -27,8 +28,5 @@
         
         <p><a href="/servers/all">full serverlist</a></p>
 
-    <a class="btn" href="/gmod">gmod info &amp; addons</a>
-    <a class="btn" href="/tf2">tf2 server info</a>
-    <a class="btn" href="/mc">mc server info</a>
 
 {% endblock %}

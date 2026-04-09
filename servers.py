@@ -1,7 +1,6 @@
 import os, pickle, a2s, mcstatus, time, asyncio, requests, subprocess, json, traceback
 from PIL import Image, ImageFont, ImageDraw
 
-running = True
 path = os.path.dirname(os.path.realpath(__file__))+'/' # still stupid
 timestamp = 0
 
@@ -44,11 +43,6 @@ servers = {
         "game": "tf2",
         "name": "eli tf2 server Z",
         "ip": (ip, 27043),
-    },
-    "hl2mp": {
-        "game": "hl2mp",
-        "name": "eli hl2mp server",
-        "ip": (ip, 27039),
     },
     "hldm": {
         "game": "hldm",
@@ -153,10 +147,8 @@ class server_info(object):
     def __eq__(self, other):
         if not other:
             return False
-        eq_self = self.__dict__.copy()
-        eq_other = other.__dict__.copy()
-        del eq_self["timestamp"]
-        del eq_other["timestamp"]
+        eq_self = {k: v for k, v in self.__dict__.copy().items() if k not in ["timestamp", "player_list"]}
+        eq_other = {k: v for k, v in other.__dict__.copy().items() if k not in ["timestamp", "player_list"]}
         return eq_self == eq_other
 
 def seconds(sec:int):
@@ -196,7 +188,7 @@ def query_server(server, timestamp):
     playerlist = []
     try:
         if game in xtra.source_games:
-            q = a2s.info(ip, 0.3)
+            q = a2s.info(ip)
             if q.player_count > 0:
                 for player in a2s.players(ip):
                     playerlist.append({
@@ -209,7 +201,7 @@ def query_server(server, timestamp):
             return server_info(q.player_count, q.max_players, playerlist, q.map_name, q.game, subtitleA, subtitleB, timestamp)
         
         elif game == "mc":
-            q = mcstatus.JavaServer.lookup(ip, 0.3).status()
+            q = mcstatus.JavaServer.lookup(ip).status()
             if q.players.sample:
                 for player in q.players.sample:
                     playerlist.append({"name": player.name,})
@@ -268,16 +260,20 @@ arial = ImageFont.truetype(f"{path}static/Arial.ttf", 10)
 
 async def draw_banners():
     global timestamp
-    global running
-    while running:
+    while True:
         timestamp = int(time.time())
         for server in servers.copy():
             try:
+                old_query = queries[server]
                 query = query_server(server, timestamp)
-                if not query or query == queries[server]:
+                if not query:
                     continue
-                print(f"updated {server}")
+                if old_query == query:
+                    query.timestamp = old_query.timestamp
+                    queries[server] = query
+                    continue
                 queries[server] = query
+                print(f"updated {server}")
                 img = Image.open(f"{path}static/img/servers/template-{servers[server]["game"]}.gif")
                 draw = ImageDraw.Draw(img)
                 draw.text((162, 1), f"{query.player_count}/{query.max_players}", "white", verdana)
@@ -294,10 +290,11 @@ async def draw_banners():
                 draw = ImageDraw.Draw(img)
             draw.text((35, 1), servers[server]['name'], "white", verdana)
             img.save(f"{path}static/img/servers/banner-{server}.gif")
-            with open("servers.dat", "wb") as f:
-                pickle.dump(queries, f)
+        
+        with open("servers.dat", "wb") as f:
+            pickle.dump(queries, f)
                 
-        print("--- updated servers!")
+        print(f"--- loop completed! ({timestamp}) ---")
         await asyncio.sleep(10)
 
 if __name__ == "__main__":

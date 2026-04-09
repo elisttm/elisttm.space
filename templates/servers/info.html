@@ -6,7 +6,7 @@
     <title>server info ({{game}})</title>
     <style>
         .main {margin-top: 64px; padding: 32px 0 32px;}
-        code {font-size: 1.25em; line-height: 2; text-align: center;}
+        code {display: block; font-size: 1.25em; line-height: 1.5; margin-top: 8px; text-align: center; user-select: all;}
         table {width: 75%; margin: 24px auto 8px; overflow: hidden; white-space: nowrap; border-collapse: collapse; text-align: left;}
         td {padding-bottom: 8px;}
         th {padding-bottom: 12px;}
@@ -15,7 +15,7 @@
         .p2, .p3 {padding-left: 16px; text-align: right;}
         .info {margin: 8px 16px;}
         .players, table {font-family: monospace; font-size: 1.15em;}
-        h1, h2, h3, p {margin-left: 0; margin-right: 0}
+        h1, h2, h3, p {margin-left: 0; margin-right: 0; text-align: center;}
     </style>
 </head>
 <body style="background:#000 url('/static/img/bg/stars.gif');">
@@ -24,37 +24,44 @@
     <h1>{{info["name"]}}</h1>
     
     {%- if query %}
-    <br><b>
+    <p><b>
         <span class="info">{{xtra.full_names[info["game"]]}}</span>
         {%- if info["game"] in ("gmod", "eldewrito", "halo", "quake")%}<span class="info">{{query.gamemode}}</span><span class="info">{{query.map_name}}</span>
         {%- elif info["game"] == "mc" %}<span class="info">{{ query.subtitleB }}</span>
         {%- elif info["game"] in xtra.source_games %}<span class="info">{{query.map_name}}</span>
-    {% endif %}
-    </b><br>
+        {% endif %}
+    </b></p>
     {%- else %}
 
     <h2 style="color:#F00">!!! SERVER OFFLINE !!!</h2>
 
     {%- endif %}
 
-    <p>
     {%- if info["game"] in xtra.source_games %}
-        <code>connect e.elisttm.space:{{info["ip"][1]}}{% if info["password"] %}; password {{ info["password"] }}{% endif %}</code><br>
-        <h2><a class="btn" href="/connect/{{game}}">click here to connect!</a></h2>
+        <p>
+            <span style="font-weight: bold; font-size: 1.25em">&gt;&gt; <a href="/connect/{{game}}">click here to connect!</a> &lt;&lt;</span>
+            <br><code>connect e.elisttm.space:{{info["ip"][1]}}{% if info["password"] %}; password {{ info["password"] }}{% endif %}</code>
+        </p>
     {%- elif info["game"] == "mc" %}
-        add the IP to your server browser to join!<br>
-        <code>{{ info["ip"] }}</code>
+        <p>
+            add the IP to your server browser to join!
+            <br><code>{{ info["ip"] }}</code>
+        </p>
     {%- elif info["game"] == "eldewrito" %}
-        download at <a href="https://www.eldewrito.org/">eldewrito.org</a>!
+        <p>download at <a href="https://www.eldewrito.org/">eldewrito.org</a>!</p>
     {%- elif info["game"] == "halo" %}
-        <code>e.elisttm.space:{{info["ip"][1]}}</code>
+        <p>
+            <code>e.elisttm.space:{{info["ip"][1]}}</code>
+        </p>
     {%- elif info["game"] == "quake" %}
-        join with <a href="https://ezquake.com/">ezquake</a>!<br>
-        <code>connect e.elisttm.space:{{info["ip"][1]}}</code>
+        <p>
+            join with <a href="https://ezquake.com/">ezquake</a>!
+            <br><code>connect e.elisttm.space:{{info["ip"][1]}}</code>
+        </p>
     {%- endif %}
-    </p>
+
     {%- if info["game"] in xtra.have_pages %}
-        <a class="btn" href="/{{info["game"]}}">{{info["game"]}} server overview</a>
+        <a class="btn" href="/{{info["game"]}}">{{info["game"]}} servers overview</a>
     {%- endif %}
         <a class="btn" href="/servers">back to serverlist</a>
 
