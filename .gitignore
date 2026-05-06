@@ -4,8 +4,8 @@
 **.sh
 **.db
 **.dat
+**.txt
 **.journal
 
 **/servers/banner-*
-
-test.txt
+**/.well-known/**

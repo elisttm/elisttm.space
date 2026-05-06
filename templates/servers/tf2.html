@@ -5,6 +5,10 @@
 
 {% block background %}tf2.gif{% endblock %}
 
+{% block color_bg %}rgba(27, 17, 11, 0.9){% endblock %}
+{% block color_bt %}#3c2519{% endblock %}
+{% block color_ol %}#ff8f56{% endblock %}
+
 {% block content %}
 
 	<h1>my tf2 servers</h1>
@@ -17,9 +21,8 @@
 			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>{% endif %}
         </span>
 	{%- endfor %}
+    <p><a href="/servers">see other servers</a></p>
     </div>
-    
-    <p><a href="/servers">more servers</a></p>
 	
     <p>server A runs exclusively hightower 24/7</p>
     <p>server B runs a variety of stock maps plus some workshop maps. see the mapcycle <a href="https://fastdl.elisttm.space/tf/cfg/mapcycle.txt">here!</a> !rtv and !nominate for map votes are supported.</p>

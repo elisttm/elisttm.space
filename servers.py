@@ -283,7 +283,7 @@ async def draw_banners():
                 queries[server] = None
                 img = Image.open(f"{path}static/img/servers/template-offline.gif")
                 draw = ImageDraw.Draw(img)
-            except Exception as e:
+            except Exception:
                 queries[server] = None
                 print("error in draw_banners(): ", server, traceback.format_exc())
                 img = Image.open(f"{path}static/img/servers/template-error.gif")

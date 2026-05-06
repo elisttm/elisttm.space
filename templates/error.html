@@ -1,14 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}{{ errors[error.code][0] }}{% endblock %}
-{% block desc %}{{ errors[error.code][1] }}{% endblock %}
 {% block background %}skulls.gif{% endblock %}
+
+{% block color_bg %}rgba(0, 0, 0, 0.5){% endblock %}
+{% block color_ol %}rgba(255, 255, 255, 0.5){% endblock %}
 
 {% block content %}
 
-	<div style="margin-top:16px;">
-		<h1>{{ errors[error.code][0] }}</h1>
-		<h3>{{ errors[error.code][1] }}</h3>
+<div style="margin-top:32px;">
+{% if error.code == 404 %}
+	<h1>page not found!</h1>
+	<h3>the url you're trying to access does not exist! please check for any typos in the url, or get in contact if you believe you should not be seeing this...</h3>
+{% elif error.code == 500 %}
+	<h1>internal server error!</h1>
+	<h3>something happened and the page could not load. PLEASE get in contact if this keeps happening!</h3>
+{% endif %}
 	<br>
 		<img src="/static/img/silly/ghost1.gif" title="AAAHHHHH BOOOO WAAARRHHGHH"/>
 		<img src="/static/img/silly/ghost1.gif" title="BOOOO IM A GHOST BOO SCARY" style="margin: 0 32px"/>

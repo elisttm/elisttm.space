@@ -5,28 +5,33 @@
 
 {% block background %}code.gif{% endblock %}
 
+{% block color_bg %}rgba(22, 28, 22, 0.8){% endblock %}
+{% block color_bt %}#20261d{% endblock %}
+{% block color_ol %}#809874{% endblock %}
+
 {% block content %}
 
 	<h1>my game servers</h1>
 
-    <p>a list of 24/7 public game servers that i host!</p>
+    <p>my self-hosted 24/7 game servers</p>
     
-    <a class="btn" href="/gmod">gmod info &amp; addons</a>
-    <a class="btn" href="/tf2">tf2 server info</a>
-    <a class="btn" href="/mc">mc server info</a>
-
     <div class="servers">
-    {%- for server in ("sandbox", "gmoda", "gmodb", "tf2a", "tf2b", "hldm", "sven") %}
+        {%- for server in ("sandbox", "gmoda", "gmodb", "tf2a", "tf2b", "hldm", "sven") %}
         <span>
             <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" alt="about {{server}}" width="265" height="31"/></a>
 			{% if not queries[server] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
 			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>{% endif %}
         </span>
-            
-    {%- endfor %}
-    </div>
         
-        <p><a href="/servers/all">full serverlist</a></p>
+        {%- endfor %}
+        <p><a href="/servers/all">view full serverlist</a> · updates every 10s!</p>
+    </div>
+    
+    <br>
 
+    <a class="btn" href="/gmod"><span style="background: url('/static/img/nav-servers.gif') 0 0;"></span>gmod info / addons</a>
+    <a class="btn" href="/tf2"><span style="background: url('/static/img/nav-servers.gif') -24px 0;"></span>tf2 server info</a>
+    <a class="btn" href="/mc"><span style="background: url('/static/img/nav-servers.gif') -48px 0;"></span>mc server info</a>
+    
 
 {% endblock %}

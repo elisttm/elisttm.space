@@ -1,50 +1,80 @@
 ::selection {color: #000; background: #ffaec9;}
 :root {cursor: url('/static/img/cursor-default.gif'), auto;}
 
-body {font-family: sans-serif; text-align: center; color: #fff; padding: 0; margin: 0 auto; width: 600px;}
+body {font-family: sans-serif; color: #fff; padding: 0; margin: 0;}
 
-.header, nav, .main {margin: 4px 0; overflow: hidden; box-sizing: border-box;}
-.main, nav > a, .btn {background-color: rgba(0,0,0,0.8); border: 4px outset #fff;}
+.site, .header, .main, .motd, nav, nav > a, .btn {box-sizing: border-box;}
 
-nav {display: flex; gap: 4px;}
-nav > a {flex-basis: 20%; overflow: hidden;}
-nav > a:hover, nav > a:active {background-color: #000;}
+.site {display: block; margin: 0 auto; width: 600px;}
+.main {padding: 4px 0 24px; width: 100%; text-align: center;}
 
-nav > a, .btn {font-family: "Tahoma", sans-serif; text-decoration: none; font-weight: bold; padding: 8px;}
+.header, .main, .motd {width: 100%; margin: 8px 0 0; vertical-align: middle;}
+.header::after, .motd::after {content: ""; clear: both; display: table;} /* clearfix */
+.logo {float: left; margin: 10px 0 0 10px; font-size: 0}
+
+nav {display: block; margin: 0; overflow: hidden; font-size: 0;}
+nav > a {width: 130px; padding: 5px 8px; margin: 8px 0 0 8px; overflow: hidden; white-space: nowrap;}
+nav > a > span, .btn > span {width: 24px; height: 24px; margin-right: 10px; image-rendering: pixelated;}
+nav > a > span {background-image: url('/static/img/nav.gif')}
+
+nav > a, .btn {display: inline-block; font-family: "Tahoma", sans-serif; font-size: 0.8rem; text-decoration: none; font-weight: bold;}
 nav > a:hover, .btn:hover {border-style: inset}
-.btn {display: inline-block; font-size: 0.8em; margin: 8px 2px}
 
-.main {padding: 16px 0 24px;}
-.header {margin: 16px 0}
+.motd {display: block; background-color: #000; padding: 8px; border: 4px dotted #ff0095;}
 
-h1, h2, h3 {margin: 16px 64px 16px; font-family: monospace}
-p {margin: 12px 64px 12px; text-align: justify; text-align-last: center; line-height: 1.5; word-spacing: 0.25px;}
+.btn {margin: 8px 2px; padding: 8px 12px;}
+
+p {text-align: justify; text-align-last: center; line-height: 1.15; letter-spacing: 0.5px; word-spacing: 0.25px;}
+
 a {color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: url('/static/img/cursor-pointer.gif'), pointer;}
+a:hover {text-decoration-style: double;}
+p a, ul a, ol a {color: #ffaec9}
 
-ul, ol {display: inline-block; text-align: left; max-width: 80%}
-li {margin-bottom: 16px;}
+h1, h2, h3, p {margin-left: 48px; margin-right: 48px;}
+h1, h2 {font-family: monospace; margin: 24px 0 24px;}
+h1:before {content: "> "; color: rgba(255,255,255,0.3);}
+
+ul, ol {display: inline-block; text-align: left; max-width: 80%; margin-top: 4px;}
+li {margin-bottom: 12px;}
+li > p {margin: 8px 0 16px; text-align-last: left;}
 
 img {max-height: 100%; max-width: 100%; image-rendering: pixelated;}
-img, span, .inline {display: inline-block; vertical-align: middle;}
+img, span, .buttons > a {display: inline-block; vertical-align: middle;}
 .main img {margin: 1px 0; border: 0;}
 .btn > img {margin: 0}
 
-.buttons {margin: 8px 0;}
-.socials {margin-bottom: 24px;}
-.buttons img {margin: 1px 1px;}
-.buttons > a > img:hover {margin: 0; border: 1px solid #fff;}
+.subtitle {font-size: 0.8rem; color: rgba(255,255,255,0.8);}
+.pointer {margin: 16px; font-family: monospace; font-size: 0.9rem}
 
-.servers {margin: 16px 0 8px;}
-.servers img {margin: 1px -1px}
+hr {margin: 24px 0;}
+
+.buttons {margin: 0 32px; font-size: 0;}
+.buttons img {margin: 2px;}
+.buttons a > img:hover {margin: 0px; border: 2px dotted #ffaec9;}
+
+.servers {display: inline-block; padding: 16px 16px 4px; margin: 0 0 16px; background-color: rgba(0,0,0,0.5); border: 1px inset #888;}
+.servers p {font-size: 0.8rem}
+.servers img {margin: 1px -1px;}
 .servers > * {display: block;}
-.servers a > *:hover {margin: 0 -2px; border: 1px solid #fff;}
+.servers a > *:hover {margin: 0 -2px; border: 1px dotted #fff;}
 
+/* mobile browsers */
 @media screen and (max-width: 600px) {
-	body {width: 100vw;}
-	header, nav, .main {margin: 4px}
-	nav {flex-wrap: wrap;}
-	nav > a {flex-basis: 25%; flex-grow: 1; padding: 6px 2px}
-	nav > a:first-child, nav > a:first-child+a {flex-basis: 40%;}
-	h1, h2, h3, p {margin-left: 32px; margin-right: 32px;}
-	.mb {display: block;} .mv {display: none;}
+	.logo {float: none; font-family: monospace; font-size: 1.1rem}
+    .logo > img {display: none;}
+	.site {width: 96vw; margin: 4px 1vw 0;}
+    nav {display: flex; flex-wrap: wrap; gap: 8px;}
+	nav > a {display: flex; margin: 0; flex-grow: 1; flex-basis: 30%; padding: 6px 1vw 6px 2vw; font-size: 0.9rem; line-height: 24px;}
+    nav > a > span {margin-right: 1vw;}
+	h1, h2, h3, p {margin-left: 24px; margin-right: 24px;}
+	.buttons {margin: 0 8px;}
+}
+
+/* EXTREMELY RARE but necessary </3 */
+@media screen and (max-width: 400px) {
+	.site {width: 98vw; margin: 0 1vw;}
+	.header, .main, .motd {margin-bottom: 4px}
+    nav {gap: 4px;}
+	nav > a {padding: 6px 4px; font-size: 0.9rem;}
+	.servers {padding-left: 0; padding-right: 0;}
 }

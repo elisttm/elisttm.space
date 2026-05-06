@@ -5,6 +5,10 @@
 
 {% block background %}gmod.gif{% endblock %}
 
+{% block color_bg %}rgba(6, 14, 22, 0.8){% endblock %}
+{% block color_bt %}#152b3f{% endblock %}
+{% block color_ol %}#aad5ff{% endblock %}
+
 {% block content %}
 
 	<h1>my gmod servers</h1>
@@ -17,17 +21,17 @@
 			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>{% endif %}
 		</span>
 	{%- endfor %}
+	<p><a href="/servers">see other servers</a></p>
 	</div>
-	<p><a href="/servers">more servers</a></p>
 
-	<p>
-		each server runs a different selection of maps and modes.
-		<br>sandbox &amp; server B run only one gamemode each, while server A runs almost every popular mode, from ttt2 and prophunt to deathrun and cinema</p>
-	<p>maps and/or gamemodes can be switched with !rtv</p>
+	<p>each server runs a different selection of maps and modes.
+		<br>sandbox only runs sandbox, and server B only runs the hidden. server A runs almost every popular mode, from ttt2 and prophunt to deathrun and melonracer</p>
+	<p>maps and modes can be switched with !rtv on all servers!</p>
+	
+	<a class="btn" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2085165984">server A &amp; B addons</a>
+	<a class="btn" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2084328429">sandbox addons</a>
 	
 	<p><b>the above addons are required to play!</b></p>
-		<a class="btn" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2084328429">sandbox addons</a>
-		<a class="btn" href="https://steamcommunity.com/sharedfiles/filedetails/?id=2085165984">server A &amp; B addons</a>
 
 	<p><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3363234147">missing texture fix</a> (optional)</p>
 

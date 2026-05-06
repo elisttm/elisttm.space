@@ -1,36 +1,54 @@
 <!DOCTYPE html>
 <html lang="en-US"><head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<link rel="stylesheet" href="/static/style.css?v=34" type="text/css"/>
+	<link rel="stylesheet" href="/static/style.css?v=13" type="text/css"/>
 	<link rel="icon" href="/static/img/logo.png" type='image/png' sizes="128x128"/>
 	<link rel="icon" href="/static/img/logo64.png" type='image/png' sizes="64x64"/>
 	<link rel="icon" href="/static/img/logo32.png" type='image/png' sizes="32x32"/>
 	<link rel="icon" href="/static/img/logo16.png" type='image/png' sizes="16x16"/>
+    <link rel="preload" href="/static/img/nav.gif" as="image"/>
+    {% if self.background() %}<link rel="preload" href="/static/img/bg/{{ self.background() }}" as="image"/>{% endif %}
+    <script src="/static/scripts.js" defer></script>
 	<meta charset="utf-8"/>
-	<title>{% block title %}elisttm{% endblock %}</title>
+	<title>{% block title %}eli.toys{% endblock %}</title>
+    <meta name="keywords" content="elisttm.space, eli.toys, elisttm, eli, furry, sysadmin, python, quart, caddy" />
 	<meta name="description" content="{% block desc %}my silly website{% endblock %}"/>
 	<meta name="darkreader-lock">
 	<meta name="theme-color" content="#ffaec9"/>
-	<meta property="og:title" content="{{ self.title() }}{% if not self.title() %}elisttm.space{% endif %}"/>
+	<meta property="og:title" content="{{ self.title() }}"/>
 	<meta property="og:description" content="{{ self.desc() }}"/>
 	<meta property="og:type" content="website"/>
+    <style>
+        .main {background-color: {% block color_bg %}rgba(0,0,0,0.8){% endblock %};}
+		.btn, nav > a {background-color: {% block color_bt %}{{ self.color_bg() }}{% endblock %};}
+		.main, .btn, nav > a {border: 4px outset {% block color_ol %}#fff{% endblock %};}
+		{%- block extra_css %}{% endblock %}
+    </style>
 {%- block extra %}{% endblock %}</head>
 <body style="background:#000{% if self.background() %} url('/static/img/bg/{% block background %}{% endblock %}');{% endif %}">
+<div class="site">
 
 <div class="header">
-	<a href="/"><img src="/static/img/banner.gif" alt="elisttm.space" width="435" height="100"/></a>
+	<a class="logo" href="/"><img src="/static/img/logo.gif" alt="eli.toys logo" width="175" height="90"/>eli.toys :3</a>
+	<nav>
+		<a href="/"><span style="background-position: 0 0;"></span>home</a>
+		<a href="/about"><span style="background-position: -24px 0;"></span>about me</a>
+		<a href="/projects"><span style="background-position: -48px 0;"></span>projects</a>
+		<a href="/eli"><span style="background-position: -72px 0;"></span>my sona</a>
+		<a href="/servers"><span style="background-position: -96px 0;"></span>servers</a>
+		<a href="/links"><span style="background-position: -120px 0;"></span>links</a>
+	</nav>
 </div>
-
-<nav>
-	<a href="/">home</a>
-	<a href="/projects">projects</a>
-	<a href="/eli">eli</a>
-	<a href="/servers">servers</a>
-	<a href="/pages">pages</a>
-</nav>
 
 <div class="main">
 	{%- block content %}{% endblock %}</div>
+	
+{%- if request.path == "/" %}<p class="motd">
+	new domain + redesign! please update your links accordingly :3
+</p>{% endif %}
+
+</div>
+
 
 </body></html>
 

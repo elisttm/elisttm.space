@@ -5,25 +5,32 @@
 
 {% block background %}dirt2.png{% endblock %}
 
+{% block color_bg %}rgba(20, 13, 9, 0.8){% endblock %}
+{% block color_bt %}#27311f{% endblock %}
+{% block color_ol %}#91b372{% endblock %}
+
 {% block content %}
 
 	<h1>minecraft servers</h1>
 	
 	<div class="servers">
 	{%- for server in server_keys["mc"] %}
-        <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" alt="about {{server}}" width="265" height="31"/></a>
+		<span>
+			<a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" alt="about {{server}}" width="265" height="31"/></a>
+			{% if not queries[server] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
+			{% else %}<a onclick="copyToClipboard('{{ servers[server]["ip"] }}')"><img src="/static/img/servers/btn-copy.gif" alt="copy {{server}} ip" width="60" height="31"/></a>{% endif %}
+		</span>
 	{%- endfor %}
+	<p><a href="/servers">see other servers</a></p>
 	</div>
-
-	<p><a href="/servers">more servers</a></p>
 	
     <p>
 		my creative server is public, but griefing and offensive builds are not allowed!
-		you can navigate between creative worlds using /superflat and /creative
+		you can navigate between creative worlds using the commands <b>/superflat</b>, <b>/creative</b> and <b>/warp</b>
 	</p>
 	<a class="btn" href="https://creative.elisttm.space">view creative map</a>
 	
-	<p>i currently do NOT host a public smp server, but i do plan to in the future!</a></p>
+	<p>as of now, i do NOT host a public smp server, and cannot say whether or not i plan to...</a></p>
 
 
 {% endblock %}

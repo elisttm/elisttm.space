@@ -7,13 +7,13 @@
 		html, body, main {max-height: 100vh;}
 		body, h1, h2, h3 {margin: 0; padding: 0; text-align: center; font-family: monospace; overflow: hidden;}
 		main {margin-top: 32px;}
-		.servers {width: 265px; background-color: #000; padding: 4px;}
+		.servers {width: 265px; background-color: #000; padding: 8px;}
 		.top, .image, .servers {margin: 16px auto;}
 		.image {margin-top: 5vh}
-		* {color: #fff}
+		* {color: #fff; text-underline-offset: 3px;}
 	</style>
 </head>
-<body style="background: #000 url('/static/img/bg/stars3.gif')"><main>
+<body style="background: #000 url('/static/img/bg/stars.gif')"><main>
 	<div class="top">
 	<h1>welcome to my {% if game %}{{game}} {% endif %}server :3</h1>
 	{%- if game in server_keys %}
@@ -25,8 +25,8 @@
 	{% else %}<br><br>
 	{%- endif %}
 	<h3>visit
-		{%- if game in server_keys %} <a href="/{{game}}">elisttm.space/{{game}}</a>
-		{%- else %} <a href="/servers">elisttm.space/servers</a>
+		{%- if game in server_keys %} <a href="/{{game}}">eli.toys/{{game}}</a>
+		{%- else %} <a href="/servers">eli.toys/servers</a>
 		{%- endif %} for more info!</h3><br>
 	</div>
 	<div class="image"><img src="/static/img/silly/hamster.gif"></div>

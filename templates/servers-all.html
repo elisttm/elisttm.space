@@ -5,25 +5,28 @@
 
 {% block background %}code.gif{% endblock %}
 
+{% block color_bg %}rgba(22, 28, 22, 0.8){% endblock %}
+{% block color_bt %}#20261d{% endblock %}
+{% block color_ol %}#809874{% endblock %}
+
 {% block content %}
 
 	<h1>all game servers</h1>
 
-    <p>a list of EVERY public game server i host, including the ones that aren't online 24/7</p>
+    <p>ALL my public self-hosted game servers, including the rarely online ones. </p>
     
     <div class="servers">
     {%- for server in servers %}
         <span>
             <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" alt="about {{server}}" width="265" height="31"/></a>
-            {%- if servers[server]["game"] in source_games %}
             {% if not queries[server] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
-			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>{% endif %}
-            {%- endif %}
+			{%- elif servers[server]["game"] in source_games %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>
+            {%- else %}<a onclick="copyToClipboard('{% if servers[server]["ip"] is not string %}play.eli.toys:{{ servers[server]["ip"][1] }}{% else %}{{ servers[server]["ip"] }}{% endif %}')"><img src="/static/img/servers/btn-copy.gif" alt="copy {{server}} ip" width="60" height="31"/></a>{% endif %}
         </span>
 	
     {%- endfor %}
+    <p><a href="/servers">back to main serverlist</a></p>
     </div>
 
-    <p><a href="/servers">main serverlist</a></p>
 
 {% endblock %}

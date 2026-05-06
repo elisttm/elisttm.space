@@ -3,34 +3,51 @@
 {% block title %}my projects{% endblock %}
 {% block desc %}my silly personal projects{% endblock %}
 
-{% block background %}stars4ever.gif{% endblock %}
+{% block background %}stars4.gif{% endblock %}
+
+{% block color_bg %}rgba(10, 10, 2, 0.8){% endblock %}
+{% block color_bt %}#1e1e11{% endblock %}
+{% block color_ol %}#9e9e6e{% endblock %}
 
 {% block content %}
 
 	<h1>my server</h1>
 		<p>
 			an old gaming pc turned homelab that's been running in my room since 2020.
-			i use it to host all sorts of things, most notably my <a href="/servers">game servers</a> and many web servers (see below!).
-			a repo of custom tools i use to manage my server can be found <a href="https://github.com/elisttm/server-utils">here.</a>
+			i use it to host all sorts of things, most notably my <a href="/servers">game servers</a> and many aassorted web servers.
+			a repo of custom tools i use to manage my server can be found <a href="https://github.com/elisttm/server-utils">here!</a>
 		</p>
 
-	<img src="/static/img/neofetch.gif" width="407" height="163"><br>
+	<span class="servers" style="margin: 0">
+		<img src="/static/img/neofetch.png" width="350" height="150">
+		<p class="subtitle">elisrv neofetch circa march 2026</p>
+	</span>
 
 	<h1>my website (<a href="https://github.com/elisttm/elisttm.space">github</a>)</h1>
 		<p>
-			the website you're on right now!
+			a.k.a. the website you're on right now!
 			a simple silly personal homepage for showing off my projects and socials that i've maintained and updated continuously since ~2019.
-			<br>
+		</p><p>
 			it runs python (<a href="https://github.com/pallets/quart">quart</a>) on the backend and is proxied through <a href="https://caddyserver.com/">caddy</a>.
-			this site is intentionally stupidly over-optimized, from the lack of javascript to the bit-crushed images.
+			this site is intentionally stupidly over-optimized with super compressed images and extremely minimal javascript.
 			everything, including the auto-updating serverlist, is written to be as fast as possible!
 		</p>
 
-	<h1>other websites</h1>
-		<ul style="margin-top: 0">
+	<h1>other projects</h1>
+		<ul>
 
-			<li><a href="https://f.elisttm.space/u/eli">my fileserver</a> (<a href="https://github.com/elisttm/fileserver">github</a>)</li>
-				a simple js-free multi-user web fileserver, similar to <a href="https://github.com/9001/copyparty">copyparty</a> before it existed<br>
+			<li>
+				<a href="https://f.elisttm.space/u/eli">fileserver</a> (<a href="https://github.com/elisttm/fileserver">source</a>) <img style="margin-left: 8px;" src="/static/img/88x31/fileserver.gif" width="88" height="31" alt="fileserver">
+				<p>a simple js-free multi-user web fileserver i made in python. was intended to be similar to <a href="https://github.com/9001/copyparty">copyparty</a> before i knew about it</p>
+			</li>
+			<li>
+				<a href="https://f.elisttm.space/u/eli/resource_pack">my resource pack</a>
+				<p>a minecraft resource pack i made. its a combination of my own custom assets and assets from other packs i like. only here because people use it, for some reason</p>
+			</li>
+			<li>
+				<a href="https://github.com/elisttm/sillybot">my discord bot</a>
+				<p>my first ever python project, developed using <a href="https://discordpy.readthedocs.io/en/latest/">discord.py</a> from 2018 till 2022. gave up on it when api changes meant i needed to mass migrate everything</p>
+			</li>
 		</ul>
 
 {% endblock %}

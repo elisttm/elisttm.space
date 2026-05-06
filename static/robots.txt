@@ -1,4 +1,6 @@
 User-agent: *
 Disallow: /static/img/servers
+Disallow: /info/
+Disallow: /connect/
 
-Sitemap: https://elisttm.space/sitemap.xml
+Sitemap: https://eli.toys/sitemap
