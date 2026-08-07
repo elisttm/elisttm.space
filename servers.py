@@ -10,70 +10,70 @@ ip = "73.207.108.187"
 servers = {
     "sandbox": {
         "game": "gmod",
-        "name": "eli sandbox server",
+        "name": "eli sandbox",
         "ip": (ip, 27017),
         "password": "chungus",
     },
     "gmoda": {
         "game": "gmod",
-        "name": "eli gmod server A",
+        "name": "gmod A | MODES + RTV",
         "ip": (ip, 27015),
     },
     "gmodb": {
         "game": "gmod",
-        "name": "eli gmod server B",
+        "name": "gmod B | THE HIDDEN",
         "ip": (ip, 27018),
     },
-    "jazz": {
-        "game": "gmod",
-        "name": "eli jazztronauts",
-        "ip": (ip, 27041),
-    },
+    #"jazz": {
+    #    "game": "gmod",
+    #    "name": "eli jazztronauts",
+    #    "ip": (ip, 27041),
+    #},
     "tf2a": {
         "game": "tf2",
-        "name": "eli tf2 server A",
+        "name": "tf2 A | 24/7 HIGHTOWER",
         "ip": (ip, 27016),
     },
     "tf2b": {
         "game": "tf2",
-        "name": "eli tf2 server B",
+        "name": "tf2 B | ALL MAPS + !rtv",
         "ip": (ip, 27019),
     },
     "tf2z": {
         "game": "tf2",
-        "name": "eli tf2 server Z",
+        "name": "tf2 Z | GAMEMODES",
         "ip": (ip, 27043),
     },
     "hldm": {
         "game": "hldm",
-        "name": "eli hldm server",
+        "name": "eli hl1 dm",
         "ip": (ip, 27013),
     },
     "sven": {
         "game": "sven",
-        "name": "eli sven coop",
+        "name": "eli sven coop (!rtv)",
         "ip": (ip, 27040),
     },
     "smp": {
         "game": "mc",
         "name": "eli smp",
-        "ip": "mc.elisttm.space",
+        "ip": "mc.eli.toys",
     },
     "creative": {
         "game": "mc",
-        "name": "creative server",
-        "ip": "creative.elisttm.space",
+        "name": "eli creative",
+        "ip": "creative.eli.toys",
     },
-    "eldewrito": {
-        "game": "eldewrito",
-        "name": "eli halo server",
-        "ip": (ip, 11775),
-    },
-    "haloce": {
-        "game": "halo",
-        "name": "eli haloce server",
-        "ip": (ip, 2302),
-    },
+    #"eldewrito": {
+    #    "game": "eldewrito",
+    #    "name": "eli halo server",
+    #    "ip": (ip, 11775),
+    #},
+    #"haloce": {
+    #    "game": "halo",
+    #    "name": "eli haloce server",
+    #    "ip": (ip, 2302),
+    #},
     "quake": {
         "game": "quake",
         "name": "eli qw server",
@@ -196,8 +196,8 @@ def query_server(server, timestamp):
                         "score": player.score,
                         "time": seconds(round(player.duration))
                     })
-            subtitleA = xtra.tf2_gamemode(q.map_name) if game == "tf2" else truncate_str(q.game, 24)
-            subtitleB = truncate_str(q.map_name, 18)
+            subtitleA = xtra.tf2_gamemode(q.map_name) if game == "tf2" else truncate_str(q.game, 32)
+            subtitleB = truncate_str(q.map_name, 24)
             return server_info(q.player_count, q.max_players, playerlist, q.map_name, q.game, subtitleA, subtitleB, timestamp)
         
         elif game == "mc":
@@ -255,7 +255,7 @@ def query_server(server, timestamp):
 for server in servers:
     queries[server] = None
 
-verdana = ImageFont.truetype(f"{path}static/Verdana-Bold.ttf", 11)
+verdana = ImageFont.truetype(f"{path}static/Verdana-Bold.ttf", 10)
 arial = ImageFont.truetype(f"{path}static/Arial.ttf", 10)
 
 async def draw_banners():
@@ -276,9 +276,9 @@ async def draw_banners():
                 print(f"updated {server}")
                 img = Image.open(f"{path}static/img/servers/template-{servers[server]["game"]}.gif")
                 draw = ImageDraw.Draw(img)
-                draw.text((162, 1), f"{query.player_count}/{query.max_players}", "white", verdana)
-                draw.text((35, 15.5), query.subtitleA, "white", arial)
-                draw.text((162, 15.5), query.subtitleB, "white", arial)
+                draw.text((185, 2), f"{query.player_count}/{query.max_players}", "white", verdana)
+                draw.text((35, 16), query.subtitleA, "white", arial)
+                draw.text((185, 16), query.subtitleB, "white", arial)
             except TimeoutError:
                 queries[server] = None
                 img = Image.open(f"{path}static/img/servers/template-offline.gif")
@@ -288,7 +288,7 @@ async def draw_banners():
                 print("error in draw_banners(): ", server, traceback.format_exc())
                 img = Image.open(f"{path}static/img/servers/template-error.gif")
                 draw = ImageDraw.Draw(img)
-            draw.text((35, 1), servers[server]['name'], "white", verdana)
+            draw.text((36, 2), servers[server]['name'], "white", verdana)
             img.save(f"{path}static/img/servers/banner-{server}.gif")
         
         with open("servers.dat", "wb") as f:

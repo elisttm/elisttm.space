@@ -52,7 +52,7 @@ hr {margin: 24px 0;}
 .buttons img {margin: 2px;}
 .buttons a > img:hover {margin: 0px; border: 2px dotted #ffaec9;}
 
-.servers {display: inline-block; padding: 16px 16px 4px; margin: 0 0 16px; background-color: rgba(0,0,0,0.5); border: 1px inset #888;}
+.servers {display: inline-block; padding: 16px 24px 4px; margin: 0 0 16px; background-color: rgba(0,0,0,0.5); border: 1px inset #888;}
 .servers p {font-size: 0.8rem}
 .servers img {margin: 1px -1px;}
 .servers > * {display: block;}

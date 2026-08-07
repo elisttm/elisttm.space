@@ -16,7 +16,7 @@
     <div class="servers">
     {%- for server in server_keys["tf2"] %}
         <span>
-            <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" alt="about {{server}}" width="265" height="31"/></a>
+            <a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" alt="about {{server}}" width="300" height="31"/></a>
 			{% if not queries[server] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
 			{%- else %}<a href="/connect/{{server}}"><img src="/static/img/servers/btn-connect.gif" alt="connect to {{server}}" width="60" height="31"/></a>{% endif %}
         </span>
@@ -25,6 +25,6 @@
     </div>
 	
     <p>server A runs exclusively hightower 24/7</p>
-    <p>server B runs a variety of stock maps plus some workshop maps. see the mapcycle <a href="https://fastdl.elisttm.space/tf/cfg/mapcycle.txt">here!</a> !rtv and !nominate for map votes are supported.</p>
+    <p>server B runs a variety of stock maps plus some workshop maps. see the mapcycle <a href="https://fastdl.eli.toys/tf/cfg/mapcycle.txt">here!</a> !rtv and !nominate for map votes are supported.</p>
 
 {% endblock %}

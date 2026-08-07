@@ -11,7 +11,7 @@
     <script src="/static/scripts.js" defer></script>
 	<meta charset="utf-8"/>
 	<title>{% block title %}eli.toys{% endblock %}</title>
-    <meta name="keywords" content="elisttm.space, eli.toys, elisttm, eli, furry, sysadmin, python, quart, caddy" />
+    <meta name="keywords" content="elisttm.space, eli.toys, elisttm, eli, furry, therian, gmod, tf2"/>
 	<meta name="description" content="{% block desc %}my silly website{% endblock %}"/>
 	<meta name="darkreader-lock">
 	<meta name="theme-color" content="#ffaec9"/>
@@ -43,8 +43,8 @@
 <div class="main">
 	{%- block content %}{% endblock %}</div>
 	
-{%- if request.path == "/" %}<p class="motd">
-	new domain + redesign! please update your links accordingly :3
+{%- if self.motd() %}<p class="motd">
+	{% block motd %}{% endblock %}
 </p>{% endif %}
 
 </div>

@@ -16,7 +16,7 @@
 	<div class="servers">
 	{%- for server in server_keys["mc"] %}
 		<span>
-			<a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" alt="about {{server}}" width="265" height="31"/></a>
+			<a href="/info/{{server}}"><img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" alt="about {{server}}" width="300" height="31"/></a>
 			{% if not queries[server] %}<img src="/static/img/servers/btn-offline.gif" alt="{{server}} offline" width="60" height="31"/>
 			{% else %}<a onclick="copyToClipboard('{{ servers[server]["ip"] }}')"><img src="/static/img/servers/btn-copy.gif" alt="copy {{server}} ip" width="60" height="31"/></a>{% endif %}
 		</span>
@@ -28,7 +28,7 @@
 		my creative server is public, but griefing and offensive builds are not allowed!
 		you can navigate between creative worlds using the commands <b>/superflat</b>, <b>/creative</b> and <b>/warp</b>
 	</p>
-	<a class="btn" href="https://creative.elisttm.space">view creative map</a>
+	<a class="btn" href="https://creative.eli.toys">view creative map</a>
 	
 	<p>as of now, i do NOT host a public smp server, and cannot say whether or not i plan to...</a></p>
 

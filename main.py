@@ -1,4 +1,4 @@
-import os, asyncio, quart, hypercorn, pickle, datetime
+import os, re, asyncio, quart, hypercorn, pickle, datetime
 from quart import request, redirect, render_template, send_from_directory
 import servers as srv
 
@@ -10,27 +10,20 @@ def get_queries():
     with open("servers.dat", "rb") as f:
         return pickle.load(f)
 
-def find_crawlers(request): # TEMPORARY! trying to collect non-identified crawler/spam analytics
+def find_crawlers(request, file): # TEMPORARY! trying to collect non-identified crawler/spam analytics
     try:
         if any(x in request.headers.get("User-Agent").lower() for x in ("eli.toys", "192.168")) not in request.headers.get("Referer").lower() and request.headers.get("User-Agent") and not any(x in request.headers.get("User-Agent").lower() for x in ("bot","search","scan","crawl")):
             crawl_log = f"{request.path} :: {request.headers.get("User-Agent")} :: {request.headers.get("Referer")}"
             print(crawl_log)
-            with open("crawlers.txt", "a") as file:
+            with open(file, "a") as file:
                 file.write(f"{crawl_log}\n")
         return
     except Exception:
         return None
 
-def get_age():
-    born = datetime.datetime(2005, 2, 10)
-    today = datetime.date.today()
-    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-
-print(get_age())
-
 @app.before_request
 async def run_before_request():
-    find_crawlers(request)
+    find_crawlers(request, "crawlers.txt")
 
 # regular pages
 
@@ -62,7 +55,7 @@ async def _game_page():
 @app.route('/motd', defaults={'game': None})
 @app.route('/motd/<game>')
 async def _motd(game):
-    return await render_template('servers/motd.html', game=game, servers=srv.servers, queries=get_queries(), server_keys=srv.xtra.server_keys)
+    return await render_template(f'servers/motd{"-tf2" if "tf2" in str(game) else ""}.html', game=game, servers=srv.servers, queries=get_queries(), server_keys=srv.xtra.server_keys)
 
 @app.route('/connect/<server>')
 async def _server_connect(server):
@@ -113,11 +106,37 @@ async def _static_from_root():
 async def _well_known(file_name):
     return await send_from_directory(f"{app.static_folder}/.well-known/", file_name)
 
+@app.route('/discord')
+async def _redirect_discord():
+    return redirect("https://discord.gg/gKu5KT7cXx", code=301)
+
 @app.errorhandler(404)
 @app.errorhandler(500)
 async def _error_handler(error):
     response = quart.Response(await render_template('error.html', error=error,), error.code)
     response.headers.set("X-Robots-Tag", "noindex")
+    return response
+
+scraper_filter = re.compile("wp-|\\.(env|git|php?)")
+@app.route('/<path:path>')
+async def _tarpit(path):
+    if not scraper_filter.match(path):
+        return quart.abort(404)
+    async def infinite_load():
+        try:
+            while True:
+                yield b" "
+                await asyncio.sleep(5)
+        except KeyboardInterrupt:
+            return
+        except Exception:
+            print(f"finished blocking /{path}")
+            return
+    response = await quart.make_response(infinite_load())
+    response.timeout = None
+    response.headers['Content-Type'] = 'text/plain'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     return response
 
 # webserver

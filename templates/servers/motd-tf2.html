@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-US"><head>
+	<meta charset="utf-8">
+	<meta name="robots" content="noindex">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		html, body, .main {max-height: 100vh;}
+		body, h1, h2, h3 {margin: 0; padding: 0; text-align: center; font-family: monospace; overflow: hidden;}
+		img {width: auto; height: auto;}
+        ol, li {text-align: justify; margin-bottom: 12px;}
+        ol {padding: 8px 0;}
+		.main {width: 850px; margin: 8px auto 24px; background-color: #00000044; font-size: 1.25em; line-height: 1.25; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;}
+		.top {margin: 24px auto 8px;}
+		.c1, .c2 {display: inline-block; vertical-align: top;}
+        .c1 {width: 475px; margin-right: 16px;}
+        .c2 {width: 325px; margin-top: 16px;}
+        .servers {width: 300px; background-color: #000; padding: 8px;}
+		* {color: #fff; text-underline-offset: 3px;}
+	</style>
+</head>
+<body style="background: #000 url('/static/img/bg/stars.gif')">
+	
+    <div class="top">
+        <h1>welcome to my tf2 server :3</h1>
+        <p>mreow mrrp mreowww meowmeow mrrp prrrrrrr meeow! </p>
+    </div>
+
+    <img src="/static/img/line.gif"/>
+
+    <div class="main">
+        <div class="c1">
+    
+            <ol>
+                <li><b>this is an 18+ server!</b> nsfw topics &amp; sprays are allowed, but IRL, cub/underage, gore, scat, emeto, &amp; dubcon/noncon are prohibited.</li>
+                <li><b>be nice.</b> no bigotry of any kind, dont be toxic or annoying, and respect people's boundaries.
+                <li><b>no cheating or exploits.</b> harmless bugs/glitches that provide no competitive advantage are fine!
+                <li><b>be mindful of what you say!</b> this is a public server. ALL chat messages in this server are relayed to the discord. please, do not post any personal info...
+            </ol>
+
+            <p>use <b>!nominate</b> + <b>!rtv</b> to switch maps!</p>
+            <p>PLEASE report rule breakers with <b>/report</b>!!!</p>
+            
+            <br><p>join the discord server :3 <a href="https://discord.gg/gKu5KT7cXx">discord.gg/gKu5KT7cXx</a></p>
+
+        </div>
+        <div class="c2">
+        <div class="servers">
+            {%- for server in server_keys["tf2"] %}
+            <img src="/static/img/servers/banner-{{server}}.gif?t={{queries[server].timestamp}}" width="300" height="31"/>
+            {%- endfor %}
+        </div>
+            <p>see more at <a href="https://eli.toys/servers">eli.toys/servers</a>!</p>
+            
+            <br><img style="height: 275px;" src="/static/img/silly/hamster.gif">
+        </div>
+	</div>
+
+    <img src="/static/img/line.gif"/>
+</div></body></html>
