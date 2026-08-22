@@ -45,17 +45,17 @@
     <p>
     {%- if info["game"] in xtra.source_games %}
         <span style="font-weight: bold; font-size: 1.25em">&gt;&gt; <a href="/connect/{{game}}">click here to connect!</a> &lt;&lt;</span>
-        <br><code>connect play.eli.toys:{{info["ip"][1]}}{% if info["password"] %}; password {{ info["password"] }}{% endif %}</code>
+        <br><code>connect play.eli.toys:{{query.ip[1]}}{% if info["password"] %}; password {{ info["password"] }}{% endif %}</code>
     {%- elif info["game"] == "mc" %}
         add the IP to your server browser to join!
-        <br><code>{{ info["ip"] }}</code>
+        <br><code>{{ query.ip }}</code>
     {%- elif info["game"] == "eldewrito" %}
         download at <a href="https://www.eldewrito.org/">eldewrito.org</a>!
     {%- elif info["game"] == "halo" %}
-        <code>play.eli.toys:{{info["ip"][1]}}</code>
+        <code>play.eli.toys:{{query.ip[1]}}</code>
     {%- elif info["game"] == "quake" %}
         join with <a href="https://ezquake.com/">ezquake</a>!
-        <br><code>connect play.eli.toys:{{info["ip"][1]}}</code>
+        <br><code>connect play.eli.toys:{{query.ip[1]}}</code>
     {%- endif %}
     </p>
 

@@ -6,53 +6,59 @@ timestamp = 0
 
 qstat_bin = "/usr/bin/quakestat"
 
-ip = "73.207.108.187"
+def get_ip():
+    with open(os.path.expanduser('~/PUBLIC_IP') , "r") as f:
+        ip = f.read()
+    return ip
+
 servers = {
+    "ip": get_ip(),
+    
     "sandbox": {
         "game": "gmod",
         "name": "eli sandbox",
-        "ip": (ip, 27017),
+        "port": 27017,
         "password": "chungus",
     },
     "gmoda": {
         "game": "gmod",
         "name": "gmod A | MODES + RTV",
-        "ip": (ip, 27015),
+        "port": 27015,
     },
     "gmodb": {
         "game": "gmod",
         "name": "gmod B | THE HIDDEN",
-        "ip": (ip, 27018),
+        "port": 27018,
     },
     #"jazz": {
     #    "game": "gmod",
     #    "name": "eli jazztronauts",
-    #    "ip": (ip, 27041),
+    #    "port": 27041,
     #},
     "tf2a": {
         "game": "tf2",
         "name": "tf2 A | 24/7 HIGHTOWER",
-        "ip": (ip, 27016),
+        "port": 27016,
     },
     "tf2b": {
         "game": "tf2",
         "name": "tf2 B | ALL MAPS + !rtv",
-        "ip": (ip, 27019),
+        "port": 27019,
     },
     "tf2z": {
         "game": "tf2",
         "name": "tf2 Z | GAMEMODES",
-        "ip": (ip, 27043),
+        "port": 27043,
     },
     "hldm": {
         "game": "hldm",
         "name": "eli hl1 dm",
-        "ip": (ip, 27013),
+        "port": 27013,
     },
     "sven": {
         "game": "sven",
-        "name": "eli sven coop (!rtv)",
-        "ip": (ip, 27040),
+        "name": "eli sven coop | \"RTV\"",
+        "port": 27040,
     },
     "smp": {
         "game": "mc",
@@ -67,17 +73,17 @@ servers = {
     #"eldewrito": {
     #    "game": "eldewrito",
     #    "name": "eli halo server",
-    #    "ip": (ip, 11775),
+    #    "port": 11775,
     #},
     #"haloce": {
     #    "game": "halo",
     #    "name": "eli haloce server",
-    #    "ip": (ip, 2302),
+    #    "port": 2302,
     #},
     "quake": {
         "game": "quake",
         "name": "eli qw server",
-        "ip": (ip, 27049),
+        "port": 27049,
     }
 }
 
@@ -89,6 +95,8 @@ qstat_games = {
 }
 
 class xtra:
+    public_ip = get_ip()
+
     source_games = ("gmod", "tf2", "hl2mp", "hldm", "sven")
     have_pages = ("gmod", "tf2", "mc")
 
@@ -134,7 +142,7 @@ class xtra:
         return "Team Fortress 2"
 
 class server_info(object):
-    def __init__(self, player_count, max_players, player_list, map_name, gamemode, subtitleA, subtitleB, timestamp):
+    def __init__(self, player_count, max_players, player_list, map_name, gamemode, subtitleA, subtitleB, timestamp, ip):
         self.player_count = player_count
         self.max_players = max_players
         self.player_list = player_list
@@ -143,6 +151,7 @@ class server_info(object):
         self.subtitleA = subtitleA
         self.subtitleB = subtitleB
         self.timestamp = timestamp
+        self.ip = ip
 
     def __eq__(self, other):
         if not other:
@@ -184,7 +193,7 @@ def qstat_query(server_address, game):
 
 def query_server(server, timestamp):
     game = servers[server]["game"]
-    ip = servers[server]["ip"]
+    ip = servers[server]["ip"] if "ip" in servers[server] else (servers["ip"], servers[server]["port"])
     playerlist = []
     try:
         if game in xtra.source_games:
@@ -198,14 +207,14 @@ def query_server(server, timestamp):
                     })
             subtitleA = xtra.tf2_gamemode(q.map_name) if game == "tf2" else truncate_str(q.game, 32)
             subtitleB = truncate_str(q.map_name, 24)
-            return server_info(q.player_count, q.max_players, playerlist, q.map_name, q.game, subtitleA, subtitleB, timestamp)
+            return server_info(q.player_count, q.max_players, playerlist, q.map_name, q.game, subtitleA, subtitleB, timestamp, ip)
         
         elif game == "mc":
             q = mcstatus.JavaServer.lookup(ip).status()
             if q.players.sample:
                 for player in q.players.sample:
                     playerlist.append({"name": player.name,})
-            return server_info(q.players.online, q.players.max, playerlist, None, None, ip, q.version.name, timestamp)
+            return server_info(q.players.online, q.players.max, playerlist, None, None, ip, q.version.name, timestamp, ip)
 
         elif game == "quake":
             q = qstat_query(':'.join(map(str, ip)), game)
@@ -217,7 +226,7 @@ def query_server(server, timestamp):
                 })
             gametype = f'{q["rules"]["mode"].upper()} ({q["rules"]["status"]})'
             subtitleB = truncate_str(q["map"], 18)
-            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], gametype, q["rules"]["*version"], subtitleB, timestamp)
+            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], gametype, q["rules"]["*version"], subtitleB, timestamp, ip)
 
         elif game == "halo":
             q = qstat_query(':'.join(map(str, ip)), game)
@@ -228,7 +237,7 @@ def query_server(server, timestamp):
                 })
             subtitleA = truncate_str(q["gametype"], 24)
             subtitleB = truncate_str(q["map"], 18)
-            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], q["gametype"], subtitleA, subtitleB, timestamp)
+            return server_info(q["numplayers"], q["maxplayers"], playerlist, q["map"], q["gametype"], subtitleA, subtitleB, timestamp, ip)
 
         elif game == "eldewrito":
             q = parse_json(f"http://{':'.join(map(str, ip))}")
@@ -240,7 +249,7 @@ def query_server(server, timestamp):
                 })
             subtitleA = truncate_str(q["variant"], 24) if q["status"] == "InGame" else "in lobby..."
             subtitleB = truncate_str(q["map"], 18) if q["status"] == "InGame" else ""
-            return server_info(q["numPlayers"], q["maxPlayers"], playerlist, q["map"], subtitleA, subtitleA, subtitleB, timestamp)
+            return server_info(q["numPlayers"], q["maxPlayers"], playerlist, q["map"], subtitleA, subtitleA, subtitleB, timestamp, ip)
 
         return None
 
@@ -262,7 +271,10 @@ async def draw_banners():
     global timestamp
     while True:
         timestamp = int(time.time())
+        servers["ip"] = get_ip()
         for server in servers.copy():
+            if server == "ip":
+                continue
             try:
                 old_query = queries[server]
                 query = query_server(server, timestamp)

@@ -61,7 +61,7 @@ async def _motd(game):
 async def _server_connect(server):
     if server not in srv.servers or srv.servers[server]["game"] not in srv.xtra.source_games:
         return quart.abort(404)
-    return redirect(f"steam://connect/{':'.join(map(str, srv.servers[server]['ip']))}/chungus", code=302)
+    return redirect(f"steam://connect/{':'.join(map(str, (srv.get_ip(), srv.servers[server]['port'])))}/chungus", code=302)
 
 @app.route('/info/<server>')
 async def _server_info(server):
