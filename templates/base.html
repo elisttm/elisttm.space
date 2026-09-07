@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US"><head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<link rel="stylesheet" href="/static/style.css?v=13" type="text/css"/>
+	<link rel="stylesheet" href="/static/style.css?v=15" type="text/css"/>
 	<link rel="icon" href="/static/img/logo.png" type='image/png' sizes="128x128"/>
 	<link rel="icon" href="/static/img/logo64.png" type='image/png' sizes="64x64"/>
 	<link rel="icon" href="/static/img/logo32.png" type='image/png' sizes="32x32"/>
 	<link rel="icon" href="/static/img/logo16.png" type='image/png' sizes="16x16"/>
     <link rel="preload" href="/static/img/nav.gif" as="image"/>
+	<link rel="preload" href="/static/img/logo.gif" as="image"/>
+	<link rel="preload" href="/static/img/logo-a.gif" as="image"/>
+	<link rel="preload" href="/static/img/logo-b.gif" as="image"/>
     {% if self.background() %}<link rel="preload" href="/static/img/bg/{{ self.background() }}" as="image"/>{% endif %}
     <script src="/static/scripts.js" defer></script>
 	<meta charset="utf-8"/>
@@ -29,10 +32,10 @@
 <div class="site">
 
 <div class="header">
-	<a class="logo" href="/"><img src="/static/img/logo.gif" alt="eli.toys logo" width="175" height="90"/>eli.toys :3</a>
+	<a class="logo" href="/"><span><img src="/static/img/logo.gif" alt="eli logo" width="100" height="90"/><img src="/static/img/logo-a.gif" alt="eli.toys" width="65" height="90" id="a"/><img src="/static/img/logo-b.gif" alt="eli.toys" width="100" height="20" id="b"/><span></a>
 	<nav>
 		<a href="/"><span style="background-position: 0 0;"></span>home</a>
-		<a href="/about"><span style="background-position: -24px 0;"></span>about me</a>
+		<a href="/about"><span style="background-position: -24px 0;"></span>about</a>
 		<a href="/projects"><span style="background-position: -48px 0;"></span>projects</a>
 		<a href="/eli"><span style="background-position: -72px 0;"></span>my sona</a>
 		<a href="/servers"><span style="background-position: -96px 0;"></span>servers</a>
@@ -44,7 +47,7 @@
 	{%- block content %}{% endblock %}</div>
 	
 {%- if self.motd() %}<p class="motd">
-	{% block motd %}{% endblock %}
+	{% block motd %}[9/1/2026] notice for downtime: in a few weeks, all my servers and websites (except this one) will be offline for ~1 week while i move out!{% endblock %}
 </p>{% endif %}
 
 </div>

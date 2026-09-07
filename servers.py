@@ -11,9 +11,9 @@ def get_ip():
         ip = f.read()
     return ip
 
+ip = get_ip()
+
 servers = {
-    "ip": get_ip(),
-    
     "sandbox": {
         "game": "gmod",
         "name": "eli sandbox",
@@ -42,7 +42,7 @@ servers = {
     },
     "tf2b": {
         "game": "tf2",
-        "name": "tf2 B | ALL MAPS + !rtv",
+        "name": "tf2 B | ALL MAPS + RTV",
         "port": 27019,
     },
     "tf2z": {
@@ -57,7 +57,7 @@ servers = {
     },
     "sven": {
         "game": "sven",
-        "name": "eli sven coop | \"RTV\"",
+        "name": "eli sven coop | \"rtv\"",
         "port": 27040,
     },
     "smp": {
@@ -192,8 +192,9 @@ def qstat_query(server_address, game):
     return result_json
 
 def query_server(server, timestamp):
+    global ip
     game = servers[server]["game"]
-    ip = servers[server]["ip"] if "ip" in servers[server] else (servers["ip"], servers[server]["port"])
+    ip = servers[server]["ip"] if "ip" in servers[server] else (ip, servers[server]["port"])
     playerlist = []
     try:
         if game in xtra.source_games:
@@ -269,9 +270,10 @@ arial = ImageFont.truetype(f"{path}static/Arial.ttf", 10)
 
 async def draw_banners():
     global timestamp
+    global ip
     while True:
         timestamp = int(time.time())
-        servers["ip"] = get_ip()
+        ip = get_ip()
         for server in servers.copy():
             if server == "ip":
                 continue
